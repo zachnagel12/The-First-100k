@@ -10,9 +10,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --beige:#f5f0e8;--beige-dark:#ede5d4;--beige-mid:#e8dfc9;--cream:#faf7f2;
-  --navy:#1a2540;--navy-mid:#243058;--navy-light:#2e3d6e;
-  --gold:#b8860b;--gold-light:#d4a017;--gold-pale:#f0e4b8;
+  --beige:#f5f0e8;--beige-dark:#ede5d4;--cream:#faf7f2;
+  --navy:#1a2540;--navy-light:#2e3d6e;
+  --gold:#b8860b;--gold-light:#d4a017;
   --text:#1a1a1a;--text-mid:#4a4035;--text-muted:#8a7a65;
   --border:#d4c9b0;--border-dark:#b8a88a;
   --green-val:#2d6a2d;--red-val:#9b1c1c;
@@ -20,7 +20,7 @@
 }
 body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* ── AUTH ── */
+/* AUTH */
 #auth-screen{min-height:100vh;display:flex;background:var(--navy);overflow:hidden}
 .auth-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 64px;position:relative;z-index:1}
 .auth-left::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 60px,rgba(184,134,11,.04) 60px,rgba(184,134,11,.04) 61px);pointer-events:none}
@@ -48,7 +48,13 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .btn-primary:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,37,64,.28)}
 .auth-error{color:var(--red-val);font-size:.79rem;margin-top:10px;text-align:center;line-height:1.5}
 
-/* ── APP SHELL ── */
+/* COPY LINK BUTTON */
+.copy-link-wrap{margin-top:20px;padding-top:18px;border-top:1px solid var(--border);text-align:center}
+.copy-link-label{font-size:.72rem;color:var(--text-muted);margin-bottom:8px}
+.btn-copy-link{background:none;border:1.5px solid var(--border-dark);color:var(--text-mid);font-family:'Jost',sans-serif;font-size:.78rem;padding:8px 18px;border-radius:var(--radius);cursor:pointer;transition:all .2s;width:100%}
+.btn-copy-link:hover{border-color:var(--navy);color:var(--navy)}
+
+/* APP */
 #app-screen{display:none;min-height:100vh;background:var(--beige)}
 .app-header{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:var(--navy);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
 .app-logo{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--beige);font-weight:700}
@@ -61,18 +67,15 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .btn-logout{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(245,240,232,.4);font-family:'Jost',sans-serif;font-size:.72rem;padding:6px 14px;border-radius:100px;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.06em}
 .btn-logout:hover{border-color:rgba(255,255,255,.4);color:rgba(245,240,232,.8)}
 
-/* ── NAV TABS ── */
-.app-nav{background:var(--cream);border-bottom:1px solid var(--border);display:flex;padding:0 48px;gap:0}
+/* NAV */
+.app-nav{background:var(--cream);border-bottom:1px solid var(--border);display:flex;padding:0 48px}
 .nav-tab{padding:16px 24px;background:none;border:none;font-family:'Jost',sans-serif;font-size:.8rem;font-weight:500;color:var(--text-muted);cursor:pointer;position:relative;letter-spacing:.07em;text-transform:uppercase;transition:color .2s}
 .nav-tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--navy);transform:scaleX(0);transition:transform .2s}
 .nav-tab.active{color:var(--navy)}.nav-tab.active::after{transform:scaleX(1)}
-
 .app-main{max-width:1020px;margin:0 auto;padding:44px 28px 100px}
-
-/* ── PAGE SECTIONS ── */
 .page{display:none}.page.active{display:block}
 
-/* ── HERO ── */
+/* HERO */
 .hero-section{background:var(--navy);border-radius:16px;padding:48px 56px 40px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
 .hero-section::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(184,134,11,.025) 40px,rgba(184,134,11,.025) 41px);pointer-events:none}
 .hero-section::after{content:'$';position:absolute;bottom:-30px;right:36px;font-family:'Playfair Display',serif;font-size:16rem;color:rgba(184,134,11,.05);line-height:1;pointer-events:none}
@@ -84,12 +87,12 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .hero-pct{font-family:'Playfair Display',serif;font-size:3.2rem;color:var(--gold-light);font-weight:600;line-height:1}
 .hero-pct-lbl{font-size:.68rem;color:rgba(245,240,232,.3);text-transform:uppercase;letter-spacing:.12em;margin-top:6px}
 .progress-track{position:relative;height:22px;background:rgba(255,255,255,.06);border-radius:100px;margin-bottom:14px;overflow:hidden;border:1px solid rgba(255,255,255,.05);z-index:1}
-.progress-fill{height:100%;background:linear-gradient(90deg,#9a6f0a 0%,var(--gold) 50%,var(--gold-light) 100%);border-radius:100px;transition:width 1s cubic-bezier(.34,1.4,.64,1);box-shadow:0 0 20px rgba(212,160,23,.5);position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,#9a6f0a,var(--gold),var(--gold-light));border-radius:100px;transition:width 1s cubic-bezier(.34,1.4,.64,1);box-shadow:0 0 20px rgba(212,160,23,.5);position:relative}
 .progress-fill::after{content:'';position:absolute;top:3px;left:8px;right:8px;height:7px;background:rgba(255,255,255,.22);border-radius:100px}
-.progress-endpoints{display:flex;justify-content:space-between;font-size:.73rem;color:rgba(245,240,232,.3);letter-spacing:.04em;position:relative;z-index:1}
+.progress-endpoints{display:flex;justify-content:space-between;font-size:.73rem;color:rgba(245,240,232,.3);position:relative;z-index:1}
 .progress-endpoints .mid{color:rgba(245,240,232,.55)}
 
-/* ── STATS ROW ── */
+/* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
 .stat-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow)}
 .stat-card-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.13em;color:var(--text-muted);margin-bottom:8px}
@@ -97,7 +100,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .stat-card-value.green{color:var(--green-val)}.stat-card-value.gold{color:var(--gold)}
 .stat-card-sub{font-size:.68rem;color:var(--text-muted);margin-top:5px}
 
-/* ── BREAKDOWN ── */
+/* BREAKDOWN */
 .breakdown-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .breakdown-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:22px 20px 18px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s;box-shadow:var(--shadow)}
 .breakdown-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
@@ -115,14 +118,14 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .roth .breakdown-bar-fill{background:var(--gold)}
 .taxable .breakdown-bar-fill{background:#5a7a9a}
 
-/* ── PANELS ── */
+/* PANELS */
 .panel{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:32px 36px;margin-bottom:20px;box-shadow:var(--shadow)}
 .panel-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .panel-icon{width:44px;height:44px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .panel-title{font-family:'Playfair Display',serif;font-size:1.22rem;color:var(--navy);font-weight:600;margin-bottom:5px}
 .panel-sub{font-size:.82rem;color:var(--text-muted);line-height:1.65}
 
-/* ── CHART CONTAINERS ── */
+/* CHARTS */
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
 .chart-panel{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
 .chart-panel.full{grid-column:1/-1}
@@ -130,10 +133,10 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .chart-sub{font-size:.75rem;color:var(--text-muted);margin-bottom:20px}
 .chart-wrap{position:relative;height:220px}
 .chart-wrap.tall{height:280px}
-.chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:.85rem;gap:8px}
+.chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:.85rem;gap:8px;text-align:center}
 .chart-empty-icon{font-size:2rem;opacity:.4}
 
-/* ── ANALYTICS KPI ROW ── */
+/* ANALYTICS KPI */
 .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .kpi-card{background:var(--navy);border-radius:var(--radius);padding:24px 22px;position:relative;overflow:hidden}
 .kpi-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 30px,rgba(184,134,11,.03) 30px,rgba(184,134,11,.03) 31px);pointer-events:none}
@@ -141,18 +144,17 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .kpi-value{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-light);font-weight:600;line-height:1;position:relative;z-index:1}
 .kpi-note{font-size:.7rem;color:rgba(245,240,232,.3);margin-top:6px}
 
-/* ── HISTORY TABLE ── */
+/* HISTORY TABLE */
 .history-table{width:100%;border-collapse:collapse;font-size:.84rem}
 .history-table th{text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:8px 12px;border-bottom:2px solid var(--border)}
 .history-table td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text-mid)}
 .history-table tr:last-child td{border-bottom:none}
 .history-table tr:hover td{background:var(--beige)}
 .history-table .mono{font-family:monospace;color:var(--navy);font-weight:600}
-.history-table .up{color:var(--green-val)}
-.history-table .dn{color:var(--red-val)}
+.history-table .up{color:var(--green-val)}.history-table .dn{color:var(--red-val)}
 .history-empty{text-align:center;padding:32px;color:var(--text-muted);font-size:.85rem}
 
-/* ── UPLOAD ── */
+/* UPLOAD */
 .upload-zone{border:2px dashed var(--border-dark);border-radius:var(--radius);padding:36px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--beige)}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--navy);background:var(--beige-dark)}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -165,7 +167,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .log-entry:last-child{border-bottom:none}
 .log-name{color:var(--text-mid)}.log-val{color:var(--green-val);font-weight:600}
 
-/* ── MANUAL ── */
+/* MANUAL */
 .manual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
 .mfield label{display:block;font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:7px}
 .inp-wrap{position:relative}
@@ -175,7 +177,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .btn-save{background:var(--navy);border:none;color:var(--beige);font-family:'Jost',sans-serif;font-weight:600;font-size:.8rem;padding:12px 28px;border-radius:var(--radius);cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.1em}
 .btn-save:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,37,64,.25)}
 
-/* ── GOAL ── */
+/* GOAL */
 .goal-inputs-row{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end;margin-bottom:24px}
 .gfield label{display:block;font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:7px}
 .goal-input,.goal-select{width:100%;padding:12px 14px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'Jost',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;appearance:none}
@@ -191,23 +193,19 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 .gstat-val.gold{color:var(--gold-light)}.gstat-val.cream{color:var(--beige)}
 .gstat-note{font-size:.7rem;color:rgba(245,240,232,.3);margin-top:7px}
 
-/* ── ORNAMENT ── */
+/* ORNAMENT */
 .ornament{display:flex;align-items:center;gap:14px;margin:32px 0}
 .ornament::before,.ornament::after{content:'';flex:1;height:1px;background:var(--border-dark);opacity:.5}
 .ornament-d{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);opacity:.5;display:inline-block;margin:0 2px}
 
-/* ── SNAPSHOT BTN ── */
-.btn-snapshot{background:none;border:1.5px solid var(--border-dark);color:var(--text-mid);font-family:'Jost',sans-serif;font-size:.75rem;padding:8px 18px;border-radius:var(--radius);cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.08em}
-.btn-snapshot:hover{border-color:var(--navy);color:var(--navy)}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:28px;right:28px;background:var(--navy);border-left:3px solid var(--gold);color:var(--beige);font-size:.82rem;padding:14px 20px;border-radius:6px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:9999;max-width:310px;box-shadow:var(--shadow-lg);line-height:1.5}
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--navy);border-left:3px solid var(--gold);color:var(--beige);font-size:.82rem;padding:14px 20px;border-radius:6px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:9999;max-width:320px;box-shadow:var(--shadow-lg);line-height:1.5}
 .toast.show{opacity:1;transform:translateY(0)}
 
 @media(max-width:768px){
   #auth-screen{flex-direction:column}.auth-left{display:none}.auth-right{width:100%;min-height:100vh}
   .app-header{padding:0 20px}.header-center{display:none}
-  .app-nav{padding:0 16px}.nav-tab{padding:14px 14px;font-size:.72rem}
+  .app-nav{padding:0 16px}.nav-tab{padding:14px 12px;font-size:.72rem}
   .app-main{padding:24px 14px 80px}
   .hero-section{padding:28px 22px 24px}.hero-amount{font-size:3.2rem}.hero-amount .curr{font-size:1.6rem}.hero-pct{font-size:1.8rem}
   .stats-row{grid-template-columns:1fr 1fr}.breakdown-row{grid-template-columns:1fr}
@@ -219,7 +217,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
 </head>
 <body>
 
-<!-- ═══════════ AUTH ═══════════ -->
+<!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-left">
     <div class="auth-wordmark">The<span>First 100k.</span></div>
@@ -235,7 +233,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
   <div class="auth-right">
     <div class="auth-panel">
       <div class="auth-panel-title" id="panel-title">Welcome back.</div>
-      <div class="auth-panel-sub" id="panel-sub">Sign in to your account to continue tracking your progress.</div>
+      <div class="auth-panel-sub" id="panel-sub">Sign in to continue tracking your portfolio.</div>
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
         <button class="auth-tab" onclick="switchTab('register')">Create Account</button>
@@ -253,11 +251,17 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
         <button class="btn-primary" onclick="handleRegister()">Create Account &rarr;</button>
         <div id="reg-error" class="auth-error"></div>
       </div>
+
+      <!-- BOOKMARK PROMPT — appears after account creation -->
+      <div class="copy-link-wrap" id="copy-link-wrap" style="display:none">
+        <div class="copy-link-label">📌 Bookmark this page with your data saved in the URL — so you can always sign back in.</div>
+        <button class="btn-copy-link" onclick="copyLink()">Copy My Personal Link</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ APP ═══════════ -->
+<!-- APP -->
 <div id="app-screen">
   <header class="app-header">
     <div class="app-logo">The <em>First 100k</em></div>
@@ -267,19 +271,16 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
       <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
     </div>
   </header>
-
   <nav class="app-nav">
     <button class="nav-tab active" onclick="showPage('dashboard')">Dashboard</button>
     <button class="nav-tab" onclick="showPage('analytics')">Analytics</button>
     <button class="nav-tab" onclick="showPage('manage')">Manage</button>
     <button class="nav-tab" onclick="showPage('goal')">Goal Planner</button>
   </nav>
-
   <main class="app-main">
 
-    <!-- ─── DASHBOARD ─── -->
+    <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-
       <div class="hero-section">
         <div class="hero-top">
           <div>
@@ -293,87 +294,34 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
         </div>
         <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
         <div class="progress-endpoints">
-          <span>$0</span>
-          <span class="mid" id="remaining-label">$100,000 remaining</span>
-          <span>$100,000</span>
+          <span>$0</span><span class="mid" id="remaining-label">$100,000 remaining</span><span>$100,000</span>
         </div>
       </div>
-
       <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-card-label">All-Time Growth</div>
-          <div class="stat-card-value green" id="s-growth">$0</div>
-          <div class="stat-card-sub">vs. first snapshot</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Snapshots Logged</div>
-          <div class="stat-card-value" id="s-snaps">0</div>
-          <div class="stat-card-sub">balance updates</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Avg Monthly Add</div>
-          <div class="stat-card-value gold" id="s-avgmo">—</div>
-          <div class="stat-card-sub">based on history</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Tracking Since</div>
-          <div class="stat-card-value" id="s-since" style="font-size:1.1rem;line-height:1.3">—</div>
-          <div class="stat-card-sub">first entry date</div>
-        </div>
+        <div class="stat-card"><div class="stat-card-label">All-Time Growth</div><div class="stat-card-value green" id="s-growth">$0</div><div class="stat-card-sub">vs. first snapshot</div></div>
+        <div class="stat-card"><div class="stat-card-label">Snapshots Logged</div><div class="stat-card-value" id="s-snaps">0</div><div class="stat-card-sub">balance updates</div></div>
+        <div class="stat-card"><div class="stat-card-label">Avg Monthly Add</div><div class="stat-card-value gold" id="s-avgmo">—</div><div class="stat-card-sub">based on history</div></div>
+        <div class="stat-card"><div class="stat-card-label">Tracking Since</div><div class="stat-card-value" id="s-since" style="font-size:1.1rem;line-height:1.3">—</div><div class="stat-card-sub">first entry date</div></div>
       </div>
-
       <div class="breakdown-row">
-        <div class="breakdown-card k401">
-          <span class="card-icon">🏛</span>
-          <div class="breakdown-label">401(k) — Pre-Tax</div>
-          <div class="breakdown-value" id="val-401k">$0</div>
-          <div class="breakdown-sub">Employer retirement plan</div>
-          <div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-401k" style="width:0%"></div></div>
-        </div>
-        <div class="breakdown-card roth">
-          <span class="card-icon">🌱</span>
-          <div class="breakdown-label">Roth IRA — Post-Tax</div>
-          <div class="breakdown-value" id="val-roth">$0</div>
-          <div class="breakdown-sub">Tax-free growth &amp; withdrawals</div>
-          <div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-roth" style="width:0%"></div></div>
-        </div>
-        <div class="breakdown-card taxable">
-          <span class="card-icon">📈</span>
-          <div class="breakdown-label">Taxable Brokerage</div>
-          <div class="breakdown-value" id="val-taxable">$0</div>
-          <div class="breakdown-sub">Flexible investment account</div>
-          <div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-taxable" style="width:0%"></div></div>
-        </div>
+        <div class="breakdown-card k401"><span class="card-icon">🏛</span><div class="breakdown-label">401(k) — Pre-Tax</div><div class="breakdown-value" id="val-401k">$0</div><div class="breakdown-sub">Employer retirement plan</div><div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-401k" style="width:0%"></div></div></div>
+        <div class="breakdown-card roth"><span class="card-icon">🌱</span><div class="breakdown-label">Roth IRA — Post-Tax</div><div class="breakdown-value" id="val-roth">$0</div><div class="breakdown-sub">Tax-free growth &amp; withdrawals</div><div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-roth" style="width:0%"></div></div></div>
+        <div class="breakdown-card taxable"><span class="card-icon">📈</span><div class="breakdown-label">Taxable Brokerage</div><div class="breakdown-value" id="val-taxable">$0</div><div class="breakdown-sub">Flexible investment account</div><div class="breakdown-bar"><div class="breakdown-bar-fill" id="bar-taxable" style="width:0%"></div></div></div>
       </div>
+    </div>
 
-    </div><!-- /dashboard -->
-
-    <!-- ─── ANALYTICS ─── -->
+    <!-- ANALYTICS -->
     <div class="page" id="page-analytics">
-
       <div class="kpi-row">
-        <div class="kpi-card">
-          <div class="kpi-label">Projected Finish Date</div>
-          <div class="kpi-value" id="a-finish" style="font-size:1.4rem">—</div>
-          <div class="kpi-note">at current avg monthly pace</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Growth This Year (proj.)</div>
-          <div class="kpi-value" id="a-yearGrowth">—</div>
-          <div class="kpi-note">10% annual on current balance</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Months to Goal</div>
-          <div class="kpi-value" id="a-months">—</div>
-          <div class="kpi-note">based on history + 10% returns</div>
-        </div>
+        <div class="kpi-card"><div class="kpi-label">Projected Finish Date</div><div class="kpi-value" id="a-finish" style="font-size:1.4rem">—</div><div class="kpi-note">at current avg monthly pace</div></div>
+        <div class="kpi-card"><div class="kpi-label">Growth This Year (proj.)</div><div class="kpi-value" id="a-yearGrowth">—</div><div class="kpi-note">10% annual on current balance</div></div>
+        <div class="kpi-card"><div class="kpi-label">Months to Goal</div><div class="kpi-value" id="a-months">—</div><div class="kpi-note">based on history + 10% returns</div></div>
       </div>
-
       <div class="chart-grid">
         <div class="chart-panel full">
           <div class="chart-title">Portfolio Growth Over Time</div>
-          <div class="chart-sub">Your logged balance history — every time you save balances, a snapshot is recorded.</div>
-          <div class="chart-wrap tall"><canvas id="chart-history"></canvas><div class="chart-empty" id="empty-history"><div class="chart-empty-icon">📊</div>Save your balances on the Manage tab to start logging history.</div></div>
+          <div class="chart-sub">Your logged balance history — each snapshot you save is plotted here against the $100k goal line.</div>
+          <div class="chart-wrap tall"><canvas id="chart-history"></canvas><div class="chart-empty" id="empty-history"><div class="chart-empty-icon">📊</div>Save balances on the Manage tab to start building your history.</div></div>
         </div>
         <div class="chart-panel">
           <div class="chart-title">Projection to $100k</div>
@@ -386,20 +334,12 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
           <div class="chart-wrap"><canvas id="chart-breakdown"></canvas><div class="chart-empty" id="empty-breakdown"><div class="chart-empty-icon">🥧</div>Log multiple snapshots to see the breakdown evolve.</div></div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /analytics -->
-
-    <!-- ─── MANAGE ─── -->
+    <!-- MANAGE -->
     <div class="page" id="page-manage">
-
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">✏️</div>
-          <div>
-            <div class="panel-title">Update Balances</div>
-            <div class="panel-sub">Enter your current balances below. Every save is automatically logged as a snapshot — your history builds over time.</div>
-          </div>
-        </div>
+        <div class="panel-header"><div class="panel-icon">✏️</div><div><div class="panel-title">Update Balances</div><div class="panel-sub">Enter your current balances. Every save is automatically logged as a dated snapshot — your charts build from these over time.</div></div></div>
         <div class="manual-grid">
           <div class="mfield"><label>401(k) Balance</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="m-401k" placeholder="0.00" min="0"/></div></div>
           <div class="mfield"><label>Roth IRA Balance</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="m-roth" placeholder="0.00" min="0"/></div></div>
@@ -407,65 +347,32 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
         </div>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
           <button class="btn-save" onclick="applyManual()">Save &amp; Log Snapshot</button>
-          <span style="font-size:.76rem;color:var(--text-muted)">Snapshots are auto-dated to today.</span>
+          <span style="font-size:.76rem;color:var(--text-muted)">Auto-dated to today. Updates your charts instantly.</span>
         </div>
       </div>
-
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">📊</div>
-          <div>
-            <div class="panel-title">Import from Google Sheets or Excel</div>
-            <div class="panel-sub">Upload an <strong>.xlsx</strong> or <strong>.csv</strong>. We detect columns named <em>401k, Roth, Roth IRA, Brokerage,</em> or <em>Taxable</em> and add them to your balances.</div>
-          </div>
-        </div>
+        <div class="panel-header"><div class="panel-icon">📊</div><div><div class="panel-title">Import from Google Sheets or Excel</div><div class="panel-sub">Upload a <strong>.xlsx</strong> or <strong>.csv</strong>. We detect columns named <em>401k, Roth, Roth IRA, Brokerage,</em> or <em>Taxable</em> automatically.</div></div></div>
         <div class="upload-zone" id="upload-zone">
           <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(this)"/>
           <div class="upload-icon">📂</div>
           <div class="upload-text">Drop your spreadsheet here, or <strong>click to browse</strong></div>
-          <div class="upload-hint">Supports .xlsx · .xls · .csv exported from Google Sheets, Excel, Fidelity, Schwab, Vanguard, etc.</div>
+          <div class="upload-hint">Supports .xlsx · .xls · .csv from Google Sheets, Excel, Fidelity, Schwab, Vanguard, etc.</div>
         </div>
-        <div class="upload-log" id="upload-log">
-          <div class="upload-log-head">Detected Values</div>
-          <div id="upload-log-entries"></div>
-        </div>
+        <div class="upload-log" id="upload-log"><div class="upload-log-head">Detected Values</div><div id="upload-log-entries"></div></div>
       </div>
-
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🗂</div>
-          <div>
-            <div class="panel-title">Snapshot History</div>
-            <div class="panel-sub">Every balance save is recorded here. Your analytics charts are built from this data.</div>
-          </div>
-        </div>
-        <div id="history-table-wrap">
-          <div class="history-empty">No snapshots yet. Save your balances above to start logging.</div>
-        </div>
+        <div class="panel-header"><div class="panel-icon">🗂</div><div><div class="panel-title">Snapshot History</div><div class="panel-sub">Every balance save is recorded here. Your analytics charts are built from this data.</div></div></div>
+        <div id="history-table-wrap"><div class="history-empty">No snapshots yet. Save your balances above to start logging.</div></div>
       </div>
+    </div>
 
-    </div><!-- /manage -->
-
-    <!-- ─── GOAL PLANNER ─── -->
+    <!-- GOAL PLANNER -->
     <div class="page" id="page-goal">
-
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🎯</div>
-          <div>
-            <div class="panel-title">Monthly Contribution Goal</div>
-            <div class="panel-sub">Set a timeline to reach $100,000. We calculate your required monthly contribution factoring in 10% annual returns — compounded monthly on your existing balance and new contributions.</div>
-          </div>
-        </div>
+        <div class="panel-header"><div class="panel-icon">🎯</div><div><div class="panel-title">Monthly Contribution Goal</div><div class="panel-sub">Set a timeline to reach $100,000. We calculate your required monthly contribution factoring in 10% annual returns — compounded monthly on your existing balance and new contributions.</div></div></div>
         <div class="goal-inputs-row">
           <div class="gfield"><label>Time to Goal</label><input type="number" class="goal-input" id="goal-amount" placeholder="5" min="1" value="5"/></div>
-          <div class="gfield"><label>Unit</label>
-            <select class="goal-select" id="goal-unit">
-              <option value="days">Days</option>
-              <option value="months">Months</option>
-              <option value="years" selected>Years</option>
-            </select>
-          </div>
+          <div class="gfield"><label>Unit</label><select class="goal-select" id="goal-unit"><option value="days">Days</option><option value="months">Months</option><option value="years" selected>Years</option></select></div>
           <button class="btn-calc" onclick="calcGoal()">Calculate</button>
         </div>
         <div class="goal-result" id="goal-result">
@@ -476,229 +383,353 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
           </div>
         </div>
       </div>
-
-      <!-- Scenario chart -->
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">📐</div>
-          <div>
-            <div class="panel-title">Scenario Comparison</div>
-            <div class="panel-sub">See how different monthly contribution levels change your path to $100k — with 10% annual returns applied throughout.</div>
-          </div>
-        </div>
+        <div class="panel-header"><div class="panel-icon">📐</div><div><div class="panel-title">Scenario Comparison</div><div class="panel-sub">See how different monthly contribution levels change your path to $100k — with 10% annual returns applied throughout.</div></div></div>
         <div class="chart-wrap tall"><canvas id="chart-scenarios"></canvas></div>
       </div>
-
-    </div><!-- /goal -->
+    </div>
 
   </main>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 // ══════════════════════════════════════════
-// CONSTANTS & STATE
+//  STORAGE
+//  Primary:  localStorage
+//  Backup:   URL hash (base64 encoded)
+//  This dual approach means data survives
+//  even when localStorage is sandboxed or
+//  cleared between sessions.
 // ══════════════════════════════════════════
-const TARGET      = 100000;
-const USERS_KEY   = 'f100k_v4_accounts';
-const SESSION_KEY = 'f100k_v4_session';
+
+const TARGET   = 100000;
+const LS_KEY   = 'f100k_db';
+const SESS_KEY = 'f100k_sess';
 
 let currentUser = null;
 let state = { k401:0, roth:0, taxable:0 };
 let charts = {};
 
-// ══════════════════════════════════════════
-// STORAGE
-// ══════════════════════════════════════════
-function loadAccounts(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY))||{}; }catch{ return {}; } }
-function saveAccounts(db){ localStorage.setItem(USERS_KEY,JSON.stringify(db)); }
-function findUser(email){ return loadAccounts()[email]||null; }
-function writeUser(email,rec){ const db=loadAccounts(); db[email]=rec; saveAccounts(db); }
-
-function persistAll(){
-  if(!currentUser)return;
-  const db=loadAccounts(); const rec=db[currentUser]||{};
-  db[currentUser]={...rec, k401:state.k401, roth:state.roth, taxable:state.taxable};
-  saveAccounts(db);
+function encodeB64(obj){
+  try{ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }catch(e){ return ''; }
+}
+function decodeB64(s){
+  try{ return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){ return null; }
 }
 
-function getHistory(){ const u=findUser(currentUser); return u&&u.history?u.history:[]; }
-function saveHistory(h){ const db=loadAccounts(); if(db[currentUser]) db[currentUser].history=h; saveAccounts(db); }
+function loadDB(){
+  // Try localStorage
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw){
+      const p = JSON.parse(raw);
+      if(p && typeof p === 'object') return p;
+    }
+  }catch(e){}
+  // Fall back to URL hash
+  try{
+    const hash = window.location.hash.slice(1);
+    if(hash){
+      const d = decodeB64(hash);
+      if(d && typeof d === 'object') return d;
+    }
+  }catch(e){}
+  return {};
+}
+
+function saveDB(db){
+  // Write localStorage
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(db)); }catch(e){}
+  // Write URL hash — this is the persistent backup
+  try{
+    const encoded = encodeB64(db);
+    window.history.replaceState(null, '', '#' + encoded);
+  }catch(e){}
+}
+
+function findUser(email){
+  const db = loadDB();
+  return db[email] ? JSON.parse(JSON.stringify(db[email])) : null;
+}
+
+function writeUser(email, rec){
+  const db = loadDB();
+  db[email] = rec;
+  saveDB(db);
+}
+
+function persistAll(){
+  if(!currentUser) return;
+  const db = loadDB();
+  if(!db[currentUser]) return;
+  db[currentUser].k401    = state.k401;
+  db[currentUser].roth    = state.roth;
+  db[currentUser].taxable = state.taxable;
+  saveDB(db);
+}
+
+function getHistory(){
+  const u = findUser(currentUser);
+  return (u && Array.isArray(u.history)) ? u.history : [];
+}
+
+function saveHistory(h){
+  const db = loadDB();
+  if(!db[currentUser]) return;
+  db[currentUser].history = h;
+  saveDB(db);
+}
 
 function pushSnapshot(){
-  const h=getHistory();
-  const today=new Date().toISOString().split('T')[0];
-  // Replace today's entry if one already exists
-  const idx=h.findIndex(e=>e.date===today);
-  const entry={date:today, k401:state.k401, roth:state.roth, taxable:state.taxable, total:state.k401+state.roth+state.taxable};
-  if(idx>=0) h[idx]=entry; else h.push(entry);
-  h.sort((a,b)=>a.date.localeCompare(b.date));
+  const h = getHistory();
+  const today = new Date().toISOString().split('T')[0];
+  const entry = {
+    date:today,
+    k401:state.k401, roth:state.roth, taxable:state.taxable,
+    total:state.k401+state.roth+state.taxable
+  };
+  const idx = h.findIndex(e => e.date === today);
+  if(idx >= 0) h[idx] = entry; else h.push(entry);
+  h.sort((a,b) => a.date.localeCompare(b.date));
   saveHistory(h);
 }
 
-// ══════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════
-function switchTab(t){
-  document.getElementById('login-form').style.display    =t==='login'?'':'none';
-  document.getElementById('register-form').style.display =t==='register'?'':'none';
-  document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='register')));
-  document.getElementById('panel-title').textContent=t==='login'?'Welcome back.':'Start your journey.';
-  document.getElementById('panel-sub').textContent=t==='login'?'Sign in to continue tracking your portfolio.':'Create an account — your data persists every time you return.';
+// Session helpers
+function saveSession(email){
+  try{ localStorage.setItem(SESS_KEY, email); }catch(e){}
+  try{ sessionStorage.setItem(SESS_KEY, email); }catch(e){}
+}
+function loadSession(){
+  try{ const s = localStorage.getItem(SESS_KEY); if(s) return s; }catch(e){}
+  try{ const s = sessionStorage.getItem(SESS_KEY); if(s) return s; }catch(e){}
+  return null;
+}
+function clearSession(){
+  try{ localStorage.removeItem(SESS_KEY); }catch(e){}
+  try{ sessionStorage.removeItem(SESS_KEY); }catch(e){}
 }
 
-function hashPass(s){ let h=0; for(let i=0;i<s.length;i++) h=(Math.imul(31,h)+s.charCodeAt(i))|0; return btoa(String(h))+'_'+btoa(s.length.toString()); }
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+
+function switchTab(t){
+  document.getElementById('login-form').style.display    = t==='login' ? '' : 'none';
+  document.getElementById('register-form').style.display = t==='register' ? '' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((el,i) =>
+    el.classList.toggle('active', (i===0&&t==='login')||(i===1&&t==='register'))
+  );
+  document.getElementById('panel-title').textContent = t==='login' ? 'Welcome back.' : 'Start your journey.';
+  document.getElementById('panel-sub').textContent = t==='login'
+    ? 'Sign in to continue tracking your portfolio.'
+    : 'Create an account — your data is saved every time you return.';
+  document.getElementById('copy-link-wrap').style.display = 'none';
+}
+
+function hashPass(s){
+  let h = 0;
+  for(let i=0; i<s.length; i++) h = (Math.imul(31,h) + s.charCodeAt(i)) | 0;
+  return 'v1_' + btoa(String(h)) + '_' + s.length;
+}
 
 function handleLogin(){
-  const email=document.getElementById('login-email').value.trim().toLowerCase();
-  const pass=document.getElementById('login-password').value;
-  const err=document.getElementById('login-error'); err.textContent='';
-  if(!email||!pass){err.textContent='Please enter your email and password.';return;}
-  const user=findUser(email);
-  if(!user){err.textContent='No account found. Please create one first.';return;}
-  if(user.pwHash!==hashPass(pass)){err.textContent='Incorrect password. Please try again.';return;}
-  bootSession(email,user);
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-error');
+  err.textContent = '';
+  if(!email || !pass){ err.textContent = 'Please enter your email and password.'; return; }
+  const user = findUser(email);
+  if(!user){ err.textContent = 'No account found for that email. Create one using the tab above.'; return; }
+  if(user.pwHash !== hashPass(pass)){ err.textContent = 'Incorrect password. Please try again.'; return; }
+  bootSession(email, user, false);
 }
 
 function handleRegister(){
-  const email=document.getElementById('reg-email').value.trim().toLowerCase();
-  const pass=document.getElementById('reg-password').value;
-  const conf=document.getElementById('reg-confirm').value;
-  const err=document.getElementById('reg-error'); err.textContent='';
-  if(!email||!pass||!conf){err.textContent='Please fill in all fields.';return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Please enter a valid email address.';return;}
-  if(pass.length<6){err.textContent='Password must be at least 6 characters.';return;}
-  if(pass!==conf){err.textContent='Passwords do not match.';return;}
-  if(findUser(email)){err.textContent='An account with this email already exists.';return;}
-  const rec={pwHash:hashPass(pass),k401:0,roth:0,taxable:0,history:[],createdAt:new Date().toISOString()};
-  writeUser(email,rec);
-  bootSession(email,rec);
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('reg-password').value;
+  const conf  = document.getElementById('reg-confirm').value;
+  const err   = document.getElementById('reg-error');
+  err.textContent = '';
+  if(!email||!pass||!conf){ err.textContent='Please fill in all fields.'; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent='Please enter a valid email address.'; return; }
+  if(pass.length < 6){ err.textContent='Password must be at least 6 characters.'; return; }
+  if(pass !== conf){ err.textContent='Passwords do not match.'; return; }
+  if(findUser(email)){ err.textContent='An account already exists for this email. Sign in instead.'; return; }
+
+  const rec = {
+    pwHash:    hashPass(pass),
+    k401:      0, roth:0, taxable:0,
+    history:   [],
+    createdAt: new Date().toISOString()
+  };
+  writeUser(email, rec);
+
+  // Show the bookmark prompt after registration
+  document.getElementById('copy-link-wrap').style.display = 'block';
+
+  bootSession(email, rec, true);
 }
 
-function bootSession(email,rec){
-  currentUser=email;
-  localStorage.setItem(SESSION_KEY,email);
-  state.k401=Number(rec.k401)||0;
-  state.roth=Number(rec.roth)||0;
-  state.taxable=Number(rec.taxable)||0;
-  document.getElementById('user-avatar').textContent=email.slice(0,2).toUpperCase();
-  document.getElementById('user-name').textContent=email;
-  document.getElementById('auth-screen').style.display='none';
-  document.getElementById('app-screen').style.display='block';
+function bootSession(email, rec, isNew){
+  currentUser = email;
+  saveSession(email);
+
+  state.k401    = Number(rec.k401)    || 0;
+  state.roth    = Number(rec.roth)    || 0;
+  state.taxable = Number(rec.taxable) || 0;
+
+  document.getElementById('user-avatar').textContent = email.slice(0,2).toUpperCase();
+  document.getElementById('user-name').textContent   = email;
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display  = 'block';
   document.getElementById('goal-result').classList.remove('show');
-  document.getElementById('upload-log').style.display='none';
+  document.getElementById('upload-log').style.display  = 'none';
+
   syncManualInputs();
   updateUI();
   showPage('dashboard');
-  setTimeout(renderAllCharts,100);
+  setTimeout(renderAllCharts, 120);
+
+  const h = getHistory();
+  const total = state.k401 + state.roth + state.taxable;
+  if(isNew){
+    showToast('Account created! Head to the Manage tab to enter your first balances.');
+  } else if(total > 0){
+    showToast(`Welcome back! Loaded ${fmt(total)} across ${h.length} snapshot${h.length!==1?'s':''}.`);
+  } else {
+    showToast('Signed in. Add your balances on the Manage tab to get started.');
+  }
 }
 
 function handleLogout(){
-  currentUser=null;
-  localStorage.removeItem(SESSION_KEY);
-  document.getElementById('auth-screen').style.display='flex';
-  document.getElementById('app-screen').style.display='none';
+  currentUser = null;
+  state = { k401:0, roth:0, taxable:0 };
+  clearSession();
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display  = 'none';
   destroyAllCharts();
-  ['login-email','login-password','reg-email','reg-password','reg-confirm'].forEach(id=>document.getElementById(id).value='');
-  ['login-error','reg-error'].forEach(id=>document.getElementById(id).textContent='');
+  ['login-email','login-password','reg-email','reg-password','reg-confirm']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  ['login-error','reg-error']
+    .forEach(id => { document.getElementById(id).textContent = ''; });
+  document.getElementById('copy-link-wrap').style.display = 'none';
+}
+
+// Copy the current URL (which has data in the hash) to clipboard
+function copyLink(){
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Personal link copied! Paste it in your browser any time to access your account.');
+  }).catch(() => {
+    // Fallback: select a temp input
+    const inp = document.createElement('input');
+    inp.value = url;
+    document.body.appendChild(inp);
+    inp.select();
+    document.execCommand('copy');
+    document.body.removeChild(inp);
+    showToast('Link copied to clipboard!');
+  });
 }
 
 // ══════════════════════════════════════════
-// NAVIGATION
+//  NAVIGATION
 // ══════════════════════════════════════════
 function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  const tabs=['dashboard','analytics','manage','goal'];
-  const idx=tabs.indexOf(name);
-  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  ['dashboard','analytics','manage','goal'].forEach((n,i) => {
+    if(n===name) document.querySelectorAll('.nav-tab')[i].classList.add('active');
+  });
   if(name==='analytics') renderAllCharts();
-  if(name==='goal') renderScenarioChart();
-  if(name==='manage') renderHistoryTable();
+  if(name==='goal')      renderScenarioChart();
+  if(name==='manage')    renderHistoryTable();
 }
 
 // ══════════════════════════════════════════
-// UI UPDATE
+//  UI
 // ══════════════════════════════════════════
-function fmt(n){ return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function fmt(n){
+  return '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
 
 function updateUI(){
-  const total=state.k401+state.roth+state.taxable;
-  const pct=Math.min(100,(total/TARGET)*100);
-  const remaining=Math.max(0,TARGET-total);
+  const total     = state.k401 + state.roth + state.taxable;
+  const pct       = Math.min(100, (total/TARGET)*100);
+  const remaining = Math.max(0, TARGET-total);
 
-  document.getElementById('total-display').textContent=total.toLocaleString('en-US');
-  document.getElementById('pct-display').textContent=pct.toFixed(1)+'%';
-  document.getElementById('progress-fill').style.width=pct.toFixed(2)+'%';
-  document.getElementById('remaining-label').textContent=remaining>0?fmt(remaining)+' remaining':'🎉 Milestone Reached!';
+  document.getElementById('total-display').textContent  = total.toLocaleString('en-US');
+  document.getElementById('pct-display').textContent    = pct.toFixed(1)+'%';
+  document.getElementById('progress-fill').style.width  = pct.toFixed(2)+'%';
+  document.getElementById('remaining-label').textContent =
+    remaining > 0 ? fmt(remaining)+' remaining' : '🎉 Milestone Reached!';
 
-  document.getElementById('val-401k').textContent=fmt(state.k401);
-  document.getElementById('val-roth').textContent=fmt(state.roth);
-  document.getElementById('val-taxable').textContent=fmt(state.taxable);
+  document.getElementById('val-401k').textContent    = fmt(state.k401);
+  document.getElementById('val-roth').textContent    = fmt(state.roth);
+  document.getElementById('val-taxable').textContent = fmt(state.taxable);
 
-  // Mini bars showing share of total
-  const t2=total||1;
-  document.getElementById('bar-401k').style.width=(state.k401/t2*100)+'%';
-  document.getElementById('bar-roth').style.width=(state.roth/t2*100)+'%';
-  document.getElementById('bar-taxable').style.width=(state.taxable/t2*100)+'%';
+  const t2 = total || 1;
+  document.getElementById('bar-401k').style.width    = (state.k401/t2*100)+'%';
+  document.getElementById('bar-roth').style.width    = (state.roth/t2*100)+'%';
+  document.getElementById('bar-taxable').style.width = (state.taxable/t2*100)+'%';
 
-  // Stats row
-  const h=getHistory();
-  const first=h[0];
-  const allGrowth=first?total-first.total:0;
-  document.getElementById('s-growth').textContent=allGrowth>=0?'+'+fmt(allGrowth):fmt(allGrowth);
-  document.getElementById('s-growth').className='stat-card-value'+(allGrowth>=0?' green':' red-val');
-  document.getElementById('s-snaps').textContent=h.length;
+  const h     = getHistory();
+  const first = h[0];
+  const allGrowth = first ? total - first.total : 0;
+  document.getElementById('s-growth').textContent  = (allGrowth>=0?'+':'')+fmt(allGrowth);
+  document.getElementById('s-growth').className    = 'stat-card-value '+(allGrowth>=0?'green':'red-val');
+  document.getElementById('s-snaps').textContent   = h.length;
+  document.getElementById('s-since').textContent   = first
+    ? new Date(first.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
 
-  if(h.length>=2){
-    const months=(new Date(h[h.length-1].date)-new Date(h[0].date))/(1000*60*60*24*30.44);
-    const avgMo=months>0?allGrowth/months:0;
-    document.getElementById('s-avgmo').textContent=avgMo>0?'+'+fmt(avgMo):fmt(avgMo);
+  if(h.length >= 2){
+    const spanMonths = (new Date(h[h.length-1].date)-new Date(h[0].date)) / (1000*60*60*24*30.44);
+    const avgMo = spanMonths > 0 ? allGrowth/spanMonths : 0;
+    document.getElementById('s-avgmo').textContent = (avgMo>=0?'+':'')+fmt(avgMo);
   } else {
-    document.getElementById('s-avgmo').textContent='—';
+    document.getElementById('s-avgmo').textContent = '—';
   }
-  document.getElementById('s-since').textContent=first?new Date(first.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
 
-  // Analytics KPIs
-  updateAnalyticsKPIs(total,h);
+  updateAnalyticsKPIs(total, h);
   persistAll();
 }
 
-function updateAnalyticsKPIs(total,h){
-  // Projected finish using avg monthly + 10% returns
-  const r=0.10/12;
-  const yearGrowth=total*0.10;
-  document.getElementById('a-yearGrowth').textContent=fmt(Math.round(yearGrowth));
+function updateAnalyticsKPIs(total, h){
+  const r = 0.10/12;
+  document.getElementById('a-yearGrowth').textContent = fmt(Math.round(total*0.10));
 
-  let avgMo=500; // default assumption
-  if(h.length>=2){
-    const months=(new Date(h[h.length-1].date)-new Date(h[0].date))/(1000*60*60*24*30.44);
-    if(months>0) avgMo=Math.max(0,(h[h.length-1].total-h[0].total)/months);
+  let avgMo = 400;
+  if(h.length >= 2){
+    const spanMonths = (new Date(h[h.length-1].date)-new Date(h[0].date)) / (1000*60*60*24*30.44);
+    if(spanMonths > 0) avgMo = Math.max(0, (h[h.length-1].total-h[0].total)/spanMonths);
   }
 
-  // months to hit target: solve via iteration
-  let proj=total, m=0;
-  while(proj<TARGET&&m<600){ proj=proj*(1+r)+avgMo; m++; }
-  if(m>=600){ document.getElementById('a-months').textContent='600+'; document.getElementById('a-finish').textContent='Far future'; }
-  else {
-    document.getElementById('a-months').textContent=m||'—';
-    const d=new Date(); d.setMonth(d.getMonth()+m);
-    document.getElementById('a-finish').textContent=d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  let proj = total, m = 0;
+  while(proj < TARGET && m < 600){ proj = proj*(1+r)+avgMo; m++; }
+
+  if(m >= 600){
+    document.getElementById('a-months').textContent  = '600+';
+    document.getElementById('a-finish').textContent  = 'Far future';
+  } else {
+    document.getElementById('a-months').textContent  = m || '—';
+    const d = new Date(); d.setMonth(d.getMonth()+m);
+    document.getElementById('a-finish').textContent  =
+      d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
   }
 }
 
 function syncManualInputs(){
-  document.getElementById('m-401k').value=state.k401||'';
-  document.getElementById('m-roth').value=state.roth||'';
-  document.getElementById('m-taxable').value=state.taxable||'';
+  document.getElementById('m-401k').value    = state.k401    || '';
+  document.getElementById('m-roth').value    = state.roth    || '';
+  document.getElementById('m-taxable').value = state.taxable || '';
 }
 
 function applyManual(){
-  state.k401=parseFloat(document.getElementById('m-401k').value)||0;
-  state.roth=parseFloat(document.getElementById('m-roth').value)||0;
-  state.taxable=parseFloat(document.getElementById('m-taxable').value)||0;
+  state.k401    = parseFloat(document.getElementById('m-401k').value)    || 0;
+  state.roth    = parseFloat(document.getElementById('m-roth').value)    || 0;
+  state.taxable = parseFloat(document.getElementById('m-taxable').value) || 0;
   pushSnapshot();
   updateUI();
   renderAllCharts();
@@ -707,21 +738,22 @@ function applyManual(){
 }
 
 // ══════════════════════════════════════════
-// FILE UPLOAD
+//  FILE UPLOAD
 // ══════════════════════════════════════════
 function handleFileUpload(input){
-  const file=input.files[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
     try{
-      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-      let delta={k401:0,roth:0,taxable:0}; const log=[];
-      wb.SheetNames.forEach(sheet=>{
-        XLSX.utils.sheet_to_json(wb.Sheets[sheet],{defval:''}).forEach(row=>{
-          Object.keys(row).forEach(col=>{
-            const key=col.toLowerCase().replace(/[\s\(\)\.\-_]/g,'');
-            const val=parseFloat(String(row[col]).replace(/[,$%]/g,''))||0;
-            if(val<=0)return;
+      const wb   = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+      let delta  = {k401:0,roth:0,taxable:0};
+      const log  = [];
+      wb.SheetNames.forEach(sheet => {
+        XLSX.utils.sheet_to_json(wb.Sheets[sheet],{defval:''}).forEach(row => {
+          Object.keys(row).forEach(col => {
+            const key = col.toLowerCase().replace(/[\s\(\)\.\-_]/g,'');
+            const val = parseFloat(String(row[col]).replace(/[,$%]/g,'')) || 0;
+            if(val <= 0) return;
             if(key.includes('401')){ delta.k401+=val; log.push({label:`${sheet} → ${col}`,val}); }
             else if(key.includes('roth')){ delta.roth+=val; log.push({label:`${sheet} → ${col}`,val}); }
             else if(key.includes('taxable')||key.includes('brokerage')||key.includes('individual')){ delta.taxable+=val; log.push({label:`${sheet} → ${col}`,val}); }
@@ -731,9 +763,9 @@ function handleFileUpload(input){
       if(!log.length){ showToast('No matching columns found. Label columns: 401k, Roth, Brokerage, or Taxable.'); return; }
       state.k401+=delta.k401; state.roth+=delta.roth; state.taxable+=delta.taxable;
       pushSnapshot(); syncManualInputs(); updateUI(); renderAllCharts(); renderHistoryTable();
-      const logEl=document.getElementById('upload-log');
-      document.getElementById('upload-log-entries').innerHTML=log.map(e=>`<div class="log-entry"><span class="log-name">${e.label}</span><span class="log-val">+${fmt(e.val)}</span></div>`).join('');
-      logEl.style.display='block';
+      document.getElementById('upload-log-entries').innerHTML =
+        log.map(e=>`<div class="log-entry"><span class="log-name">${e.label}</span><span class="log-val">+${fmt(e.val)}</span></div>`).join('');
+      document.getElementById('upload-log').style.display = 'block';
       showToast(`Imported ${log.length} value${log.length>1?'s':''} from "${file.name}" ✓`);
     }catch(err){ showToast('Could not read file. Please use .xlsx or .csv.'); }
   };
@@ -741,65 +773,67 @@ function handleFileUpload(input){
 }
 
 // ══════════════════════════════════════════
-// GOAL CALCULATOR
+//  GOAL CALCULATOR
 // ══════════════════════════════════════════
 function calcGoal(){
-  const n=parseFloat(document.getElementById('goal-amount').value);
-  const unit=document.getElementById('goal-unit').value;
-  if(!n||n<=0){showToast('Please enter a valid time amount.');return;}
-  let months=unit==='days'?n/30.44:unit==='months'?n:n*12;
-  months=Math.max(1,Math.round(months));
-  const current=state.k401+state.roth+state.taxable;
-  const r=0.10/12;
-  const fvNow=current*Math.pow(1+r,months);
-  const needed=TARGET-fvNow;
-  const pmt=needed<=0?0:needed/((Math.pow(1+r,months)-1)/r);
-  const growth=fvNow-current;
-  const d=new Date(); d.setMonth(d.getMonth()+months);
-  document.getElementById('res-monthly').textContent=pmt>0?fmt(Math.ceil(pmt)):'$0';
-  document.getElementById('res-growth').textContent=fmt(Math.round(growth));
-  document.getElementById('res-date').textContent=d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  document.getElementById('res-note').textContent=`${months} month${months!==1?'s':''} from today`;
+  const n    = parseFloat(document.getElementById('goal-amount').value);
+  const unit = document.getElementById('goal-unit').value;
+  if(!n||n<=0){ showToast('Please enter a valid time amount.'); return; }
+  let months = unit==='days' ? n/30.44 : unit==='months' ? n : n*12;
+  months = Math.max(1, Math.round(months));
+  const current = state.k401+state.roth+state.taxable;
+  const r       = 0.10/12;
+  const fvNow   = current * Math.pow(1+r, months);
+  const needed  = TARGET - fvNow;
+  const pmt     = needed<=0 ? 0 : needed / ((Math.pow(1+r,months)-1)/r);
+  const growth  = fvNow - current;
+  const d = new Date(); d.setMonth(d.getMonth()+months);
+  document.getElementById('res-monthly').textContent = pmt>0 ? fmt(Math.ceil(pmt)) : '$0';
+  document.getElementById('res-growth').textContent  = fmt(Math.round(growth));
+  document.getElementById('res-date').textContent    = d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  document.getElementById('res-note').textContent    = `${months} month${months!==1?'s':''} from today`;
   document.getElementById('goal-result').classList.add('show');
   renderScenarioChart();
 }
 
 // ══════════════════════════════════════════
-// HISTORY TABLE
+//  HISTORY TABLE
 // ══════════════════════════════════════════
 function renderHistoryTable(){
-  const h=getHistory(); const wrap=document.getElementById('history-table-wrap');
+  const h   = getHistory();
+  const wrap = document.getElementById('history-table-wrap');
   if(!h.length){ wrap.innerHTML='<div class="history-empty">No snapshots yet. Save your balances above to start logging.</div>'; return; }
-  const rows=[...h].reverse().map((e,i,arr)=>{
-    const prev=arr[i+1];
-    const diff=prev?e.total-prev.total:null;
-    const diffStr=diff===null?'—':((diff>=0?'+':'')+fmt(diff));
-    const cls=diff===null?'':diff>=0?'up':'dn';
+  const rows = [...h].reverse().map((e,i,arr) => {
+    const prev  = arr[i+1];
+    const diff  = prev ? e.total-prev.total : null;
+    const dStr  = diff===null ? '—' : (diff>=0?'+':'')+fmt(diff);
+    const cls   = diff===null ? '' : diff>=0 ? 'up' : 'dn';
     return `<tr>
       <td>${new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
-      <td class="mono">${fmt(e.k401)}</td>
-      <td class="mono">${fmt(e.roth)}</td>
-      <td class="mono">${fmt(e.taxable)}</td>
+      <td class="mono">${fmt(e.k401)}</td><td class="mono">${fmt(e.roth)}</td><td class="mono">${fmt(e.taxable)}</td>
       <td class="mono"><strong>${fmt(e.total)}</strong></td>
-      <td class="mono ${cls}">${diffStr}</td>
+      <td class="mono ${cls}">${dStr}</td>
     </tr>`;
   }).join('');
   wrap.innerHTML=`<table class="history-table"><thead><tr><th>Date</th><th>401(k)</th><th>Roth IRA</th><th>Taxable</th><th>Total</th><th>Change</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 // ══════════════════════════════════════════
-// CHARTS
+//  CHARTS
 // ══════════════════════════════════════════
-const NAVY='#1a2540', GOLD='#d4a017', ROTH_C='#7a9abf', BEIGE='#f5f0e8';
-const GRID='rgba(26,37,64,0.07)', FONT="'Jost', sans-serif";
+const C_NAVY='#1a2540',C_GOLD='#d4a017',C_BLUE='#7a9abf',C_BEIGE='#f5f0e8',C_GRID='rgba(26,37,64,.07)',C_FONT="'Jost',sans-serif";
 
 function chartDefaults(){
   return {
     responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{display:false}, tooltip:{backgroundColor:NAVY, titleColor:BEIGE, bodyColor:'rgba(245,240,232,.7)', borderColor:'rgba(184,134,11,.3)', borderWidth:1, padding:12, titleFont:{family:FONT,size:12}, bodyFont:{family:FONT,size:11} } },
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:C_NAVY,titleColor:C_BEIGE,bodyColor:'rgba(245,240,232,.7)',borderColor:'rgba(184,134,11,.3)',borderWidth:1,padding:12,
+               titleFont:{family:C_FONT,size:12},bodyFont:{family:C_FONT,size:11}}
+    },
     scales:{
-      x:{ grid:{color:GRID,drawBorder:false}, ticks:{color:'#8a7a65',font:{family:FONT,size:11}} },
-      y:{ grid:{color:GRID,drawBorder:false}, ticks:{color:'#8a7a65',font:{family:FONT,size:11}, callback:v=>'$'+v.toLocaleString()} }
+      x:{grid:{color:C_GRID,drawBorder:false},ticks:{color:'#8a7a65',font:{family:C_FONT,size:11}}},
+      y:{grid:{color:C_GRID,drawBorder:false},ticks:{color:'#8a7a65',font:{family:C_FONT,size:11},callback:v=>'$'+v.toLocaleString()}}
     }
   };
 }
@@ -809,194 +843,111 @@ function destroyAllCharts(){
   charts={};
 }
 
-function renderAllCharts(){
-  renderHistoryChart();
-  renderProjectionChart();
-  renderBreakdownChart();
-}
+function renderAllCharts(){ renderHistoryChart(); renderProjectionChart(); renderBreakdownChart(); }
 
-function setEmpty(id,show){
-  const el=document.getElementById(id);
-  if(el) el.style.display=show?'flex':'none';
-}
+function setEmpty(id,show){ const el=document.getElementById(id); if(el) el.style.display=show?'flex':'none'; }
 
 function renderHistoryChart(){
+  const canvas=document.getElementById('chart-history'); if(!canvas) return;
+  if(charts.history){charts.history.destroy();delete charts.history;}
   const h=getHistory();
-  const canvas=document.getElementById('chart-history');
-  if(!canvas)return;
-  if(charts.history){charts.history.destroy(); delete charts.history;}
   if(h.length<2){setEmpty('empty-history',true);return;}
   setEmpty('empty-history',false);
-  const labels=h.map(e=>new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}));
-  const data=h.map(e=>e.total);
   const cfg=chartDefaults();
-  cfg.plugins.legend={display:false};
-  charts.history=new Chart(canvas,{
-    type:'line',
-    data:{
-      labels,
-      datasets:[{
-        label:'Portfolio Total',
-        data,
-        borderColor:GOLD,
-        backgroundColor:'rgba(212,160,23,0.08)',
-        borderWidth:2.5,
-        fill:true,
-        tension:0.35,
-        pointBackgroundColor:GOLD,
-        pointRadius:4,
-        pointHoverRadius:6,
-      },{
-        label:'$100k Goal',
-        data:h.map(()=>TARGET),
-        borderColor:'rgba(26,37,64,0.25)',
-        borderDash:[6,4],
-        borderWidth:1.5,
-        pointRadius:0,
-        fill:false,
-      }]
-    },
-    options:{...cfg, plugins:{...cfg.plugins, legend:{display:true,labels:{color:'#4a4035',font:{family:FONT,size:11},boxWidth:14}}}}
-  });
+  charts.history=new Chart(canvas,{type:'line',data:{
+    labels:h.map(e=>new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'})),
+    datasets:[
+      {label:'Portfolio',data:h.map(e=>e.total),borderColor:C_GOLD,backgroundColor:'rgba(212,160,23,.08)',borderWidth:2.5,fill:true,tension:.35,pointBackgroundColor:C_GOLD,pointRadius:4,pointHoverRadius:6},
+      {label:'$100k Goal',data:h.map(()=>TARGET),borderColor:'rgba(26,37,64,.25)',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}
+    ]
+  },options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:C_FONT,size:11},boxWidth:14}}}}});
 }
 
 function renderProjectionChart(){
-  const canvas=document.getElementById('chart-projection');
-  if(!canvas)return;
-  if(charts.proj){charts.proj.destroy(); delete charts.proj;}
+  const canvas=document.getElementById('chart-projection'); if(!canvas) return;
+  if(charts.proj){charts.proj.destroy();delete charts.proj;}
   const total=state.k401+state.roth+state.taxable;
   if(total===0){setEmpty('empty-proj',true);return;}
   setEmpty('empty-proj',false);
-
-  const h=getHistory();
-  let avgMo=300;
-  if(h.length>=2){
-    const months=(new Date(h[h.length-1].date)-new Date(h[0].date))/(1000*60*60*24*30.44);
-    if(months>0) avgMo=Math.max(50,(h[h.length-1].total-h[0].total)/months);
-  }
-
-  const r=0.10/12; const labels=[]; const actual=[]; const proj=[];
-  let cur=total; let m=0;
-  while(cur<TARGET&&m<=120){ labels.push('Mo '+(m+1)); proj.push(Math.round(cur)); cur=cur*(1+r)+avgMo; m++; }
-  if(m<=120){ labels.push('Mo '+(m+1)); proj.push(TARGET); }
-  labels.unshift('Now'); proj.unshift(total);
-
+  const h=getHistory(); const r=0.10/12; let avgMo=300;
+  if(h.length>=2){const sp=(new Date(h[h.length-1].date)-new Date(h[0].date))/(1000*60*60*24*30.44);if(sp>0)avgMo=Math.max(50,(h[h.length-1].total-h[0].total)/sp);}
+  const labels=['Now'],proj=[total]; let cur=total,m=0;
+  while(cur<TARGET&&m<=120){cur=cur*(1+r)+avgMo;m++;labels.push('Mo '+m);proj.push(Math.round(cur));}
   const cfg=chartDefaults();
-  charts.proj=new Chart(canvas,{
-    type:'line',
-    data:{
-      labels,
-      datasets:[{
-        label:'Projected Balance',
-        data:proj,
-        borderColor:GOLD,
-        backgroundColor:'rgba(212,160,23,0.08)',
-        borderWidth:2,
-        fill:true,
-        tension:0.4,
-        pointRadius:2,
-      },{
-        label:'$100k Goal',
-        data:labels.map(()=>TARGET),
-        borderColor:'rgba(26,37,64,0.3)',
-        borderDash:[5,5],
-        borderWidth:1.5,
-        pointRadius:0,
-        fill:false,
-      }]
-    },
-    options:{...cfg, plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:FONT,size:11},boxWidth:14}}}}
-  });
+  charts.proj=new Chart(canvas,{type:'line',data:{
+    labels,
+    datasets:[
+      {label:'Projected',data:proj,borderColor:C_GOLD,backgroundColor:'rgba(212,160,23,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:2},
+      {label:'$100k Goal',data:labels.map(()=>TARGET),borderColor:'rgba(26,37,64,.3)',borderDash:[5,5],borderWidth:1.5,pointRadius:0,fill:false}
+    ]
+  },options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:C_FONT,size:11},boxWidth:14}}}}});
 }
 
 function renderBreakdownChart(){
-  const canvas=document.getElementById('chart-breakdown');
-  if(!canvas)return;
-  if(charts.breakdown){charts.breakdown.destroy(); delete charts.breakdown;}
+  const canvas=document.getElementById('chart-breakdown'); if(!canvas) return;
+  if(charts.breakdown){charts.breakdown.destroy();delete charts.breakdown;}
   const h=getHistory();
   if(h.length<2){setEmpty('empty-breakdown',true);return;}
   setEmpty('empty-breakdown',false);
-  const labels=h.map(e=>new Date(e.date).toLocaleDateString('en-US',{month:'short',year:'2-digit'}));
   const cfg=chartDefaults();
-  charts.breakdown=new Chart(canvas,{
-    type:'line',
-    data:{
-      labels,
-      datasets:[
-        {label:'401(k)',data:h.map(e=>e.k401),borderColor:NAVY,backgroundColor:'rgba(26,37,64,0.15)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
-        {label:'Roth IRA',data:h.map(e=>e.roth),borderColor:GOLD,backgroundColor:'rgba(212,160,23,0.12)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
-        {label:'Taxable',data:h.map(e=>e.taxable),borderColor:ROTH_C,backgroundColor:'rgba(122,154,191,0.12)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
-      ]
-    },
-    options:{...cfg, plugins:{...cfg.plugins, legend:{display:true,labels:{color:'#4a4035',font:{family:FONT,size:11},boxWidth:14}}}}
-  });
+  charts.breakdown=new Chart(canvas,{type:'line',data:{
+    labels:h.map(e=>new Date(e.date).toLocaleDateString('en-US',{month:'short',year:'2-digit'})),
+    datasets:[
+      {label:'401(k)',data:h.map(e=>e.k401),borderColor:C_NAVY,backgroundColor:'rgba(26,37,64,.15)',fill:true,tension:.3,borderWidth:2,pointRadius:3},
+      {label:'Roth IRA',data:h.map(e=>e.roth),borderColor:C_GOLD,backgroundColor:'rgba(212,160,23,.12)',fill:true,tension:.3,borderWidth:2,pointRadius:3},
+      {label:'Taxable',data:h.map(e=>e.taxable),borderColor:C_BLUE,backgroundColor:'rgba(122,154,191,.12)',fill:true,tension:.3,borderWidth:2,pointRadius:3}
+    ]
+  },options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:C_FONT,size:11},boxWidth:14}}}}});
 }
 
 function renderScenarioChart(){
-  const canvas=document.getElementById('chart-scenarios');
-  if(!canvas)return;
-  if(charts.scenarios){charts.scenarios.destroy(); delete charts.scenarios;}
-  const total=state.k401+state.roth+state.taxable;
-  const r=0.10/12;
-  const scenarios=[200,400,600,1000];
-  const colors=[ROTH_C,'#7ab87a',GOLD,NAVY];
-  const maxMonths=180;
-  const labels=Array.from({length:maxMonths+1},(_,i)=>i===0?'Now':'Mo '+i);
-
+  const canvas=document.getElementById('chart-scenarios'); if(!canvas) return;
+  if(charts.scenarios){charts.scenarios.destroy();delete charts.scenarios;}
+  const total=state.k401+state.roth+state.taxable; const r=0.10/12;
+  const scenarios=[200,400,600,1000]; const colors=[C_BLUE,'#7ab87a',C_GOLD,C_NAVY]; const maxMo=180;
+  const labels=['Now',...Array.from({length:maxMo},(_,i)=>'Mo '+(i+1))];
   const datasets=scenarios.map((pmt,i)=>{
-    const data=[total];
-    let cur=total;
-    for(let m=1;m<=maxMonths;m++){
-      if(cur>=TARGET){data.push(TARGET);}
-      else{cur=cur*(1+r)+pmt; data.push(Math.min(TARGET,Math.round(cur)));}
-    }
-    return {label:'$'+pmt+'/mo',data,borderColor:colors[i],backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:0};
+    const data=[total]; let cur=total;
+    for(let m=1;m<=maxMo;m++){ if(cur>=TARGET){data.push(TARGET);}else{cur=cur*(1+r)+pmt;data.push(Math.min(TARGET,Math.round(cur)));} }
+    return{label:'$'+pmt+'/mo',data,borderColor:colors[i],backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:0};
   });
-
-  datasets.push({
-    label:'$100k Goal',
-    data:labels.map(()=>TARGET),
-    borderColor:'rgba(26,37,64,0.25)',
-    borderDash:[6,4],
-    borderWidth:1.5,
-    pointRadius:0,
-    fill:false,
-    backgroundColor:'transparent',
-  });
-
+  datasets.push({label:'$100k Goal',data:labels.map(()=>TARGET),borderColor:'rgba(26,37,64,.25)',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false,backgroundColor:'transparent'});
   const cfg=chartDefaults();
-  charts.scenarios=new Chart(canvas,{
-    type:'line',
-    data:{labels,datasets},
-    options:{...cfg, plugins:{...cfg.plugins, legend:{display:true,labels:{color:'#4a4035',font:{family:FONT,size:12},boxWidth:14,padding:16}}}}
-  });
+  charts.scenarios=new Chart(canvas,{type:'line',data:{labels,datasets},
+    options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:C_FONT,size:12},boxWidth:14,padding:16}}}}});
 }
 
 // ══════════════════════════════════════════
-// TOAST & DRAG DROP
+//  TOAST & DRAG-DROP
 // ══════════════════════════════════════════
 let _tt;
 function showToast(msg){
   const el=document.getElementById('toast');
   el.textContent=msg; el.classList.add('show');
-  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('show'),4200);
+  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('show'),4500);
 }
 
 const zone=document.getElementById('upload-zone');
 zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
 zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
 zone.addEventListener('drop',e=>{
-  e.preventDefault(); zone.classList.remove('drag-over');
-  const f=e.dataTransfer.files[0]; if(f)handleFileUpload({files:[f]});
+  e.preventDefault();zone.classList.remove('drag-over');
+  const f=e.dataTransfer.files[0]; if(f) handleFileUpload({files:[f]});
 });
 
 // ══════════════════════════════════════════
-// BOOT
+//  BOOT — restore session on page load
 // ══════════════════════════════════════════
 (function init(){
-  const saved=localStorage.getItem(SESSION_KEY);
-  if(saved){ const u=findUser(saved); if(u){bootSession(saved,u);return;} }
-  document.getElementById('auth-screen').style.display='flex';
+  // Try to restore from session token
+  const savedEmail = loadSession();
+  if(savedEmail){
+    const user = findUser(savedEmail);
+    if(user){ bootSession(savedEmail, user, false); return; }
+    clearSession(); // stale token
+  }
+  // No valid session → show auth
+  document.getElementById('auth-screen').style.display = 'flex';
 })();
 </script>
 </body>
