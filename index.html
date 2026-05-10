@@ -561,6 +561,7 @@ const SESS_KEY = 'f100k_sess';
 let currentUser = null;
 let state = { k401:0, roth:0, taxable:0 };
 let charts = {};
+const NW_FIELDS = ['nw-student','nw-car','nw-cc','nw-mortgage','nw-other','nw-cash'];
 
 function encodeB64(obj){
   try{ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }catch(e){ return ''; }
@@ -744,15 +745,17 @@ function bootSession(email, rec, isNew){
   loadNWInputs();
   setTimeout(renderAllCharts, 120);
 
-  const h = getHistory();
-  const total = state.k401 + state.roth + state.taxable;
-  if(isNew){
-    showToast('Account created! Head to the Manage tab to enter your first balances.');
-  } else if(total > 0){
-    showToast(`Welcome back! Loaded ${fmt(total)} across ${h.length} snapshot${h.length!==1?'s':''}.`);
-  } else {
-    showToast('Signed in. Add your balances on the Manage tab to get started.');
-  }
+  try{
+    const h = getHistory();
+    const total = state.k401 + state.roth + state.taxable;
+    if(isNew){
+      showToast('Account created! Head to the Manage tab to enter your first balances.');
+    } else if(total > 0){
+      showToast('Welcome back! Loaded '+fmt(total)+' across '+h.length+' snapshot'+(h.length!==1?'s':'')+' .');
+    } else {
+      showToast('Signed in. Add your balances on the Manage tab to get started.');
+    }
+  }catch(e){ console.warn('Boot toast error:', e); }
 }
 
 function handleLogout(){
@@ -764,7 +767,7 @@ function handleLogout(){
   destroyAllCharts();
   ['login-email','login-password','reg-email','reg-password','reg-confirm']
     .forEach(id => { document.getElementById(id).value = ''; });
-  NW_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  try{ NW_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; }); }catch(e){}
   ['login-error','reg-error']
     .forEach(id => { document.getElementById(id).textContent = ''; });
   document.getElementById('copy-link-wrap').style.display = 'none';
@@ -1219,21 +1222,20 @@ zone.addEventListener('drop',e=>{
 //  BOOT — restore session on page load
 // ══════════════════════════════════════════
 (function init(){
-  // Try to restore from session token
-  const savedEmail = loadSession();
-  if(savedEmail){
-    const user = findUser(savedEmail);
-    if(user){ bootSession(savedEmail, user, false); return; }
-    clearSession(); // stale token
-  }
-  // No valid session → show auth
+  try{
+    const savedEmail = loadSession();
+    if(savedEmail){
+      const user = findUser(savedEmail);
+      if(user){ bootSession(savedEmail, user, false); return; }
+      clearSession();
+    }
+  }catch(e){ console.warn('Session restore failed:', e); }
+  // Always fall through to auth screen
   document.getElementById('auth-screen').style.display = 'flex';
 })();
 // ══════════════════════════════════════════
 //  NET WORTH
 // ══════════════════════════════════════════
-const NW_FIELDS = ['nw-student','nw-car','nw-cc','nw-mortgage','nw-other','nw-cash'];
-
 function getNWDebts(){
   return ['nw-student','nw-car','nw-cc','nw-mortgage','nw-other']
     .reduce((s,id) => s + (parseFloat(document.getElementById(id).value)||0), 0);
