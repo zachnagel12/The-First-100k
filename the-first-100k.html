@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The First 100k</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e0a;
+    --surface: #111811;
+    --surface2: #172017;
+    --border: #1f2e1f;
+    --green: #4ade80;
+    --green-dim: #22c55e;
+    --green-glow: rgba(74,222,128,0.15);
+    --green-glow2: rgba(74,222,128,0.06);
+    --text: #e8f5e8;
+    --text-dim: #7a9a7a;
+    --text-muted: #4a6a4a;
+    --gold: #fbbf24;
+    --gold-dim: #d97706;
+    --red: #f87171;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── AUTH SCREEN ── */
+  #auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(74,222,128,0.04) 0%, transparent 60%),
+                var(--bg);
+  }
+
+  #auth-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,222,128,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,222,128,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .auth-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 52px 48px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 0 80px rgba(74,222,128,0.06), 0 24px 60px rgba(0,0,0,0.6);
+  }
+
+  .auth-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem;
+    color: var(--green);
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 6px;
+    text-shadow: 0 0 40px rgba(74,222,128,0.4);
+  }
+
+  .auth-tagline {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 40px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .auth-tabs {
+    display: flex;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 28px;
+  }
+
+  .auth-tab {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .auth-tab.active {
+    background: var(--surface2);
+    color: var(--green);
+    border: 1px solid var(--border);
+  }
+
+  .field-group { margin-bottom: 18px; }
+
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-bottom: 7px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field-input:focus {
+    border-color: var(--green-dim);
+    box-shadow: 0 0 0 3px var(--green-glow);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--green);
+    color: #0a0e0a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { background: #86efac; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(74,222,128,0.3); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .auth-error {
+    color: var(--red);
+    font-size: 0.82rem;
+    margin-top: 12px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── MAIN APP ── */
+  #app-screen { display: none; min-height: 100vh; }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .app-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--green);
+    text-shadow: 0 0 20px rgba(74,222,128,0.3);
+  }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+
+  .user-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+
+  .btn-logout {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+  .app-main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── PROGRESS SECTION ── */
+  .progress-section {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .progress-amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 5rem;
+    color: var(--green);
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(74,222,128,0.35);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .progress-bar-wrap {
+    position: relative;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    height: 52px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,222,128,0.05);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #16a34a, #4ade80, #86efac);
+    border-radius: 100px;
+    transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    min-width: 0;
+    box-shadow: 4px 0 20px rgba(74,222,128,0.5);
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    right: 8px;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+    border-radius: 100px;
+  }
+
+  .progress-pct-label {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    pointer-events: none;
+  }
+
+  .progress-endpoints {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ── BREAKDOWN CARDS ── */
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .breakdown-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .breakdown-card:hover { border-color: rgba(74,222,128,0.3); transform: translateY(-2px); }
+
+  .breakdown-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent-color, var(--green));
+    opacity: 0.6;
+  }
+
+  .breakdown-card.k401 { --accent-color: #4ade80; }
+  .breakdown-card.roth { --accent-color: #60a5fa; }
+  .breakdown-card.taxable { --accent-color: #fbbf24; }
+
+  .breakdown-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .breakdown-card-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  /* ── UPLOAD SECTION ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .section-sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--green-dim);
+    background: var(--green-glow2);
+  }
+
+  .upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .upload-icon { font-size: 2rem; margin-bottom: 10px; }
+  .upload-text { color: var(--text-dim); font-size: 0.9rem; }
+  .upload-text span { color: var(--green); font-weight: 500; }
+
+  /* Manual entry */
+  .manual-entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .manual-entry-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+
+  .manual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .manual-field label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .manual-input-wrap {
+    position: relative;
+  }
+
+  .manual-input-wrap span {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+
+  .manual-input {
+    width: 100%;
+    padding: 11px 12px 11px 26px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .manual-input:focus { border-color: var(--green-dim); }
+
+  .btn-update {
+    background: var(--surface2);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.88rem;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-update:hover { background: var(--green-glow); }
+
+  /* ── GOAL SECTION ── */
+  .goal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .goal-card::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .goal-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 14px;
+    align-items: end;
+    margin-bottom: 28px;
+  }
+
+  .goal-field label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .goal-select, .goal-number-input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+
+  .goal-select:focus, .goal-number-input:focus { border-color: var(--green-dim); }
+
+  .btn-calc {
+    padding: 11px 22px;
+    background: var(--green);
+    color: #0a0e0a;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .btn-calc:hover { background: #86efac; }
+
+  .goal-result {
+    display: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .goal-result.show { display: block; }
+
+  .goal-result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .goal-stat label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .goal-stat .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    line-height: 1;
+  }
+
+  .goal-stat .stat-val.green { color: var(--green); }
+  .goal-stat .stat-val.gold { color: var(--gold); }
+  .goal-stat .stat-note {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── UPLOAD LOG ── */
+  .upload-log {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+
+  .upload-log-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .log-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.83rem;
+  }
+
+  .log-entry:last-child { border-bottom: none; }
+  .log-entry-name { color: var(--text-dim); font-family: 'DM Mono', monospace; }
+  .log-entry-val { color: var(--green); font-family: 'DM Mono', monospace; font-weight: 500; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+    position: relative;
+  }
+
+  .section-divider::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    padding: 0 12px;
+    color: var(--text-muted);
+    font-size: 0.6rem;
+  }
+
+  /* notify toast */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .app-header { padding: 16px 20px; }
+    .app-main { padding: 28px 16px 60px; }
+    .breakdown-grid { grid-template-columns: 1fr; }
+    .manual-grid { grid-template-columns: 1fr; }
+    .goal-inputs { grid-template-columns: 1fr 1fr; }
+    .goal-result-grid { grid-template-columns: 1fr 1fr; }
+    .progress-amount { font-size: 3.2rem; }
+    .auth-card { padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">The First 100k</div>
+    <div class="auth-tagline">// your path to financial momentum</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('register')">Create Account</button>
+    </div>
+    <div id="login-form">
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" class="field-input" id="login-email" placeholder="you@example.com" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" id="login-password" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+      <div id="login-error" class="auth-error"></div>
+    </div>
+    <div id="register-form" style="display:none;">
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" class="field-input" id="reg-email" placeholder="you@example.com" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" id="reg-password" placeholder="Min 6 characters" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Confirm Password</label>
+        <input type="password" class="field-input" id="reg-confirm" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary" onclick="handleRegister()">Create Account</button>
+      <div id="reg-error" class="auth-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app-screen">
+  <header class="app-header">
+    <div class="app-logo">The First 100k</div>
+    <div class="header-right">
+      <div class="user-badge" id="user-badge">user@example.com</div>
+      <button class="btn-logout" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- PROGRESS -->
+    <section class="progress-section">
+      <div class="progress-amount" id="total-display">$0</div>
+      <div class="progress-label">invested toward $100,000</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        <div class="progress-pct-label" id="pct-label">0%</div>
+      </div>
+      <div class="progress-endpoints">
+        <span>$0</span>
+        <span id="remaining-label">$100,000 remaining</span>
+        <span>$100,000</span>
+      </div>
+    </section>
+
+    <!-- ACCOUNT BREAKDOWN -->
+    <div class="breakdown-grid">
+      <div class="breakdown-card k401">
+        <div class="breakdown-card-label">401(k)</div>
+        <div class="breakdown-card-value" id="val-401k">$0</div>
+      </div>
+      <div class="breakdown-card roth">
+        <div class="breakdown-card-label">Roth IRA</div>
+        <div class="breakdown-card-value" id="val-roth">$0</div>
+      </div>
+      <div class="breakdown-card taxable">
+        <div class="breakdown-card-label">Taxable Brokerage</div>
+        <div class="breakdown-card-value" id="val-taxable">$0</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- UPLOAD -->
+    <section>
+      <div class="section-title">Import from Google Sheets / Excel</div>
+      <div class="section-sub">
+        Export your investment accounts to <strong>.xlsx</strong> or <strong>.csv</strong> and upload below. We'll scan for columns like <em>401k / 401(k), Roth IRA, Roth, Brokerage, Taxable</em> and sum the values automatically.
+      </div>
+
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(this)" />
+        <div class="upload-icon">📊</div>
+        <div class="upload-text">Drop your spreadsheet here or <span>browse</span></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;">Supports .xlsx, .xls, .csv</div>
+      </div>
+
+      <div id="upload-log" class="upload-log" style="display:none;">
+        <div class="upload-log-title">Detected Values</div>
+        <div id="upload-log-entries"></div>
+      </div>
+    </section>
+
+    <!-- OR MANUAL -->
+    <div class="manual-entry" style="margin-top:20px;">
+      <div class="manual-entry-title">Or enter balances manually</div>
+      <div class="manual-grid">
+        <div class="manual-field">
+          <label>401(k) Balance</label>
+          <div class="manual-input-wrap">
+            <span>$</span>
+            <input type="number" class="manual-input" id="m-401k" placeholder="0.00" min="0" />
+          </div>
+        </div>
+        <div class="manual-field">
+          <label>Roth IRA Balance</label>
+          <div class="manual-input-wrap">
+            <span>$</span>
+            <input type="number" class="manual-input" id="m-roth" placeholder="0.00" min="0" />
+          </div>
+        </div>
+        <div class="manual-field">
+          <label>Taxable Brokerage</label>
+          <div class="manual-input-wrap">
+            <span>$</span>
+            <input type="number" class="manual-input" id="m-taxable" placeholder="0.00" min="0" />
+          </div>
+        </div>
+      </div>
+      <button class="btn-update" onclick="applyManual()">Update Balances</button>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- GOAL SECTION -->
+    <section>
+      <div class="section-title">Monthly Goal Calculator</div>
+      <div class="section-sub">
+        Set your target date to reach $100,000. We'll factor in 10% annual growth on your current balance plus new contributions — calculated monthly using compound growth.
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-inputs">
+          <div class="goal-field">
+            <label>Time Amount</label>
+            <input type="number" class="goal-number-input" id="goal-amount" placeholder="5" min="1" value="5" />
+          </div>
+          <div class="goal-field">
+            <label>Unit</label>
+            <select class="goal-select" id="goal-unit">
+              <option value="days">Days</option>
+              <option value="months">Months</option>
+              <option value="years" selected>Years</option>
+            </select>
+          </div>
+          <button class="btn-calc" onclick="calcGoal()">Calculate →</button>
+        </div>
+
+        <div class="goal-result" id="goal-result">
+          <div class="goal-result-grid">
+            <div class="goal-stat">
+              <label>Monthly Contribution Needed</label>
+              <div class="stat-val green" id="res-monthly">—</div>
+              <div class="stat-note">per month</div>
+            </div>
+            <div class="goal-stat">
+              <label>Growth from Current Balance</label>
+              <div class="stat-val gold" id="res-growth">—</div>
+              <div class="stat-note">at 10% annual (projected)</div>
+            </div>
+            <div class="goal-stat">
+              <label>Target Date</label>
+              <div class="stat-val" style="color:var(--text);font-size:1.4rem" id="res-date">—</div>
+              <div class="stat-note" id="res-months-label">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────
+const TARGET = 100000;
+let state = { k401: 0, roth: 0, taxable: 0 };
+let currentUser = null;
+
+// ─── STORAGE HELPERS ─────────────────────────────────────
+const USERS_KEY = 'f100k_users';
+const SESSION_KEY = 'f100k_session';
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; }
+}
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+function getUserData(email) {
+  const users = getUsers();
+  return users[email] || { k401: 0, roth: 0, taxable: 0 };
+}
+
+function saveUserData(email, data) {
+  const users = getUsers();
+  users[email] = { ...getUserData(email), ...data };
+  saveUsers(users);
+}
+
+// ─── AUTH ─────────────────────────────────────────────────
+let activeTab = 'login';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register')));
+}
+
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass = document.getElementById('login-password').value;
+  const err = document.getElementById('login-error');
+  if (!email || !pass) { err.textContent = 'Please fill in all fields.'; return; }
+  const users = getUsers();
+  if (!users[email]) { err.textContent = 'No account found. Create one first.'; return; }
+  if (users[email].password !== btoa(pass)) { err.textContent = 'Incorrect password.'; return; }
+  err.textContent = '';
+  loginUser(email);
+}
+
+function handleRegister() {
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-password').value;
+  const conf = document.getElementById('reg-confirm').value;
+  const err = document.getElementById('reg-error');
+  if (!email || !pass) { err.textContent = 'Please fill in all fields.'; return; }
+  if (pass.length < 6) { err.textContent = 'Password must be at least 6 characters.'; return; }
+  if (pass !== conf) { err.textContent = 'Passwords do not match.'; return; }
+  const users = getUsers();
+  if (users[email]) { err.textContent = 'An account with this email already exists.'; return; }
+  users[email] = { password: btoa(pass), k401: 0, roth: 0, taxable: 0 };
+  saveUsers(users);
+  err.textContent = '';
+  loginUser(email);
+}
+
+function loginUser(email) {
+  currentUser = email;
+  localStorage.setItem(SESSION_KEY, email);
+  document.getElementById('user-badge').textContent = email;
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  const data = getUserData(email);
+  state.k401 = data.k401 || 0;
+  state.roth = data.roth || 0;
+  state.taxable = data.taxable || 0;
+  updateManualFields();
+  updateUI();
+}
+
+function handleLogout() {
+  currentUser = null;
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('goal-result').classList.remove('show');
+}
+
+// ─── UI UPDATE ────────────────────────────────────────────
+function fmt(n) {
+  return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+function updateUI() {
+  const total = state.k401 + state.roth + state.taxable;
+  const pct = Math.min(100, (total / TARGET) * 100);
+  const remaining = Math.max(0, TARGET - total);
+
+  document.getElementById('total-display').textContent = fmt(total);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct.toFixed(1) + '%';
+  document.getElementById('remaining-label').textContent = fmt(remaining) + ' remaining';
+  document.getElementById('val-401k').textContent = fmt(state.k401);
+  document.getElementById('val-roth').textContent = fmt(state.roth);
+  document.getElementById('val-taxable').textContent = fmt(state.taxable);
+
+  if (currentUser) {
+    saveUserData(currentUser, { k401: state.k401, roth: state.roth, taxable: state.taxable });
+  }
+}
+
+function updateManualFields() {
+  document.getElementById('m-401k').value = state.k401 || '';
+  document.getElementById('m-roth').value = state.roth || '';
+  document.getElementById('m-taxable').value = state.taxable || '';
+}
+
+function applyManual() {
+  state.k401 = parseFloat(document.getElementById('m-401k').value) || 0;
+  state.roth = parseFloat(document.getElementById('m-roth').value) || 0;
+  state.taxable = parseFloat(document.getElementById('m-taxable').value) || 0;
+  updateUI();
+  showToast('Balances updated ✓');
+}
+
+// ─── FILE UPLOAD / PARSE ──────────────────────────────────
+function handleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array' });
+      let found = { k401: 0, roth: 0, taxable: 0 };
+      const logEntries = [];
+
+      wb.SheetNames.forEach(sheetName => {
+        const sheet = wb.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+        rows.forEach(row => {
+          Object.keys(row).forEach(col => {
+            const colLower = col.toLowerCase().replace(/[\s\(\)\.]/g, '');
+            const val = parseFloat(String(row[col]).replace(/[,$]/g, '')) || 0;
+            if (val <= 0) return;
+
+            if (colLower.includes('401k') || colLower.includes('401(k)') || colLower.includes('fouroneonek')) {
+              found.k401 += val;
+              logEntries.push({ name: `${sheetName} → ${col}`, val, type: '401k' });
+            } else if (colLower.includes('roth')) {
+              found.roth += val;
+              logEntries.push({ name: `${sheetName} → ${col}`, val, type: 'roth' });
+            } else if (colLower.includes('taxable') || colLower.includes('brokerage') || colLower.includes('taxablebrokerage')) {
+              found.taxable += val;
+              logEntries.push({ name: `${sheetName} → ${col}`, val, type: 'taxable' });
+            }
+          });
+        });
+      });
+
+      if (logEntries.length === 0) {
+        showToast('No matching columns found. Expected: 401k, Roth, Brokerage/Taxable');
+        return;
+      }
+
+      state.k401 += found.k401;
+      state.roth += found.roth;
+      state.taxable += found.taxable;
+      updateManualFields();
+      updateUI();
+
+      // Show log
+      const logEl = document.getElementById('upload-log');
+      const logEntryEl = document.getElementById('upload-log-entries');
+      logEntryEl.innerHTML = logEntries.map(e =>
+        `<div class="log-entry"><span class="log-entry-name">${e.name}</span><span class="log-entry-val">+${fmt(e.val)}</span></div>`
+      ).join('');
+      logEl.style.display = 'block';
+      showToast(`Imported ${logEntries.length} value(s) from ${file.name} ✓`);
+    } catch (err) {
+      showToast('Error reading file. Please try a .xlsx or .csv file.');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+  input.value = '';
+}
+
+// ─── GOAL CALCULATOR ─────────────────────────────────────
+function calcGoal() {
+  const amount = parseFloat(document.getElementById('goal-amount').value);
+  const unit = document.getElementById('goal-unit').value;
+  if (!amount || amount <= 0) { showToast('Please enter a valid time amount.'); return; }
+
+  let months;
+  if (unit === 'days') months = amount / 30.44;
+  else if (unit === 'months') months = amount;
+  else months = amount * 12;
+
+  months = Math.round(months);
+  if (months < 1) months = 1;
+
+  const current = state.k401 + state.roth + state.taxable;
+  const r = 0.10 / 12; // monthly rate (10% annual)
+
+  // Future value of current balance with compound growth
+  const FV_current = current * Math.pow(1 + r, months);
+
+  // Needed from contributions
+  const needed = TARGET - FV_current;
+
+  let monthlyContrib;
+  if (needed <= 0) {
+    monthlyContrib = 0;
+  } else {
+    // FV of annuity: needed = PMT * ((1+r)^n - 1) / r
+    monthlyContrib = needed / ((Math.pow(1 + r, months) - 1) / r);
+  }
+
+  const growthFromBalance = FV_current - current;
+  const targetDate = new Date();
+  targetDate.setMonth(targetDate.getMonth() + months);
+  const dateStr = targetDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  document.getElementById('res-monthly').textContent = monthlyContrib > 0 ? fmt(Math.ceil(monthlyContrib)) : '$0';
+  document.getElementById('res-growth').textContent = fmt(Math.round(growthFromBalance));
+  document.getElementById('res-date').textContent = dateStr;
+  document.getElementById('res-months-label').textContent = `${months} month${months !== 1 ? 's' : ''} from now`;
+
+  document.getElementById('goal-result').classList.add('show');
+}
+
+// ─── TOAST ────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ─── DRAG & DROP ──────────────────────────────────────────
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const fakeInput = { files: [file] };
+    handleFileUpload(fakeInput);
+  }
+});
+
+// ─── BOOT ─────────────────────────────────────────────────
+(function boot() {
+  const saved = localStorage.getItem(SESSION_KEY);
+  if (saved) {
+    const users = getUsers();
+    if (users[saved]) {
+      loginUser(saved);
+    }
+  }
+})();
+</script>
+</body>
+</html>
