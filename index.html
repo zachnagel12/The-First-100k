@@ -213,6 +213,47 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
   .panel{padding:22px 18px}.manual-grid{grid-template-columns:1fr}
   .goal-inputs-row{grid-template-columns:1fr 1fr}.goal-result-grid{grid-template-columns:1fr;gap:20px}
 }
+
+/* NET WORTH BAR */
+.networth-section{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:28px 36px;margin-bottom:24px;box-shadow:var(--shadow)}
+.nw-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.nw-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);font-weight:600}
+.nw-summary{display:flex;gap:28px;flex-wrap:wrap}
+.nw-stat{text-align:right}
+.nw-stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:3px}
+.nw-stat-val{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;line-height:1}
+.nw-stat-val.pos{color:var(--green-val)}.nw-stat-val.neg{color:var(--red-val)}.nw-stat-val.navy{color:var(--navy)}
+.nw-track-wrap{margin-bottom:10px}
+.nw-track{position:relative;height:14px;background:var(--beige-dark);border-radius:100px;overflow:hidden;border:1px solid var(--border)}
+.nw-track-assets{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--navy),var(--navy-light));border-radius:100px;transition:width .9s cubic-bezier(.34,1.4,.64,1)}
+.nw-track-debt{position:absolute;right:0;top:0;height:100%;background:linear-gradient(90deg,#c0392b,#e74c3c);border-radius:100px;transition:width .9s ease;opacity:.75}
+.nw-track-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);margin-top:6px}
+.nw-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;padding-top:18px;border-top:1px solid var(--border)}
+
+/* MILESTONE RIBBON */
+.milestone-ribbon{display:none;background:var(--navy);border-radius:var(--radius);padding:22px 28px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.milestone-ribbon.show{display:flex;align-items:center;gap:20px}
+.milestone-ribbon::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(212,160,23,.04) 20px,rgba(212,160,23,.04) 21px);pointer-events:none}
+.milestone-icon{font-size:2.2rem;flex-shrink:0;position:relative;z-index:1}
+.milestone-text{position:relative;z-index:1}
+.milestone-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold-light);font-weight:600;margin-bottom:3px}
+.milestone-sub{font-size:.8rem;color:rgba(245,240,232,.5)}
+.milestone-close{margin-left:auto;background:none;border:none;color:rgba(245,240,232,.3);font-size:1.2rem;cursor:pointer;position:relative;z-index:1;padding:4px 8px;line-height:1}
+.milestone-close:hover{color:rgba(245,240,232,.7)}
+
+/* CONFETTI CANVAS */
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;display:none}
+
+/* PAY YOURSELF FIRST — inside goal page */
+.pyf-section{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:32px 36px;margin-bottom:20px;box-shadow:var(--shadow)}
+.pyf-inputs-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end;margin-bottom:24px}
+.pyf-result{display:none;background:var(--navy);border-radius:var(--radius);padding:28px 32px;position:relative;overflow:hidden}
+.pyf-result.show{display:block}
+.pyf-result::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 30px,rgba(184,134,11,.03) 30px,rgba(184,134,11,.03) 31px);pointer-events:none}
+.pyf-result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;position:relative;z-index:1}
+.pyf-rate-big{font-family:'Playfair Display',serif;font-size:3.5rem;color:var(--gold-light);font-weight:700;line-height:1}
+.pyf-rate-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(245,240,232,.35);display:block;margin-bottom:10px}
+.pyf-rate-note{font-size:.72rem;color:rgba(245,240,232,.35);margin-top:8px}
 </style>
 </head>
 <body>
@@ -276,6 +317,7 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
     <button class="nav-tab" onclick="showPage('analytics')">Analytics</button>
     <button class="nav-tab" onclick="showPage('manage')">Manage</button>
     <button class="nav-tab" onclick="showPage('goal')">Goal Planner</button>
+    <button class="nav-tab" onclick="showPage('networth')">Net Worth</button>
   </nav>
   <main class="app-main">
 
@@ -296,6 +338,16 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
         <div class="progress-endpoints">
           <span>$0</span><span class="mid" id="remaining-label">$100,000 remaining</span><span>$100,000</span>
         </div>
+      </div>
+
+      <!-- MILESTONE RIBBON -->
+      <div class="milestone-ribbon" id="milestone-ribbon">
+        <div class="milestone-icon" id="milestone-icon">🏆</div>
+        <div class="milestone-text">
+          <div class="milestone-title" id="milestone-title">Milestone Reached!</div>
+          <div class="milestone-sub" id="milestone-sub">You've crossed a new threshold on your path to $100k.</div>
+        </div>
+        <button class="milestone-close" onclick="closeMilestone()">✕</button>
       </div>
       <div class="stats-row">
         <div class="stat-card"><div class="stat-card-label">All-Time Growth</div><div class="stat-card-value green" id="s-growth">$0</div><div class="stat-card-sub">vs. first snapshot</div></div>
@@ -383,6 +435,44 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
           </div>
         </div>
       </div>
+      <div class="pyf-section">
+        <div class="panel-header"><div class="panel-icon">💰</div><div>
+          <div class="panel-title">Pay Yourself First Calculator</div>
+          <div class="panel-sub">Enter your take-home income and target date — we'll tell you exactly what savings rate you need to hit $100k, so you can budget from the top down.</div>
+        </div></div>
+        <div class="pyf-inputs-row">
+          <div class="gfield"><label>Monthly Take-Home Income</label>
+            <div class="inp-wrap" style="position:relative"><span class="inp-prefix">$</span>
+              <input type="number" class="goal-input" id="pyf-income" placeholder="5,000" min="0" style="padding-left:26px"/></div></div>
+          <div class="gfield"><label>Target Timeline</label>
+            <input type="number" class="goal-input" id="pyf-years" placeholder="5" min="1" value="5"/></div>
+          <div class="gfield"><label>Unit</label>
+            <select class="goal-select" id="pyf-unit">
+              <option value="months">Months</option>
+              <option value="years" selected>Years</option>
+            </select></div>
+          <button class="btn-calc" onclick="calcPYF()">Calculate</button>
+        </div>
+        <div class="pyf-result" id="pyf-result">
+          <div class="pyf-result-grid">
+            <div>
+              <span class="pyf-rate-label">Required Savings Rate</span>
+              <div class="pyf-rate-big" id="pyf-rate">—</div>
+              <div class="pyf-rate-note">of your monthly take-home</div>
+            </div>
+            <div>
+              <span class="pyf-rate-label">Monthly Amount to Set Aside</span>
+              <div class="gstat-val gold" id="pyf-monthly" style="font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:600;line-height:1;color:var(--gold-light)">—</div>
+              <div class="pyf-rate-note">transferred before spending anything</div>
+            </div>
+            <div>
+              <span class="pyf-rate-label">Remaining Spending Budget</span>
+              <div class="gstat-val cream" id="pyf-budget" style="font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:600;line-height:1;color:var(--beige)">—</div>
+              <div class="pyf-rate-note" id="pyf-note">left for all other expenses</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="panel">
         <div class="panel-header"><div class="panel-icon">📐</div><div><div class="panel-title">Scenario Comparison</div><div class="panel-sub">Type your monthly contribution to highlight your personal path in gold. The dashed lines are reference guidelines for context.</div></div></div>
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap">
@@ -399,8 +489,59 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
       </div>
     </div>
 
+    <!-- NET WORTH PAGE -->
+    <div class="page" id="page-networth">
+      <div class="networth-section">
+        <div class="nw-header">
+          <div>
+            <div class="nw-title">Net Worth Overview</div>
+            <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px">Assets minus liabilities — your real financial picture</div>
+          </div>
+          <div class="nw-summary">
+            <div class="nw-stat"><div class="nw-stat-label">Total Assets</div><div class="nw-stat-val navy" id="nw-assets">$0</div></div>
+            <div class="nw-stat"><div class="nw-stat-label">Total Debt</div><div class="nw-stat-val neg" id="nw-debt">$0</div></div>
+            <div class="nw-stat"><div class="nw-stat-label">Net Worth</div><div class="nw-stat-val" id="nw-net" style="font-size:1.7rem">$0</div></div>
+          </div>
+        </div>
+        <div class="nw-track-wrap">
+          <div class="nw-track">
+            <div class="nw-track-assets" id="nw-bar-assets" style="width:0%"></div>
+            <div class="nw-track-debt" id="nw-bar-debt" style="width:0%"></div>
+          </div>
+          <div class="nw-track-labels">
+            <span id="nw-track-lbl-assets">Assets: $0</span>
+            <span id="nw-track-lbl-debt">Debt: $0</span>
+          </div>
+        </div>
+        <div class="nw-inputs">
+          <div class="mfield"><label>Student Loans</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-student" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+          <div class="mfield"><label>Car Loan</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-car" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+          <div class="mfield"><label>Credit Card Debt</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-cc" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+          <div class="mfield"><label>Mortgage</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-mortgage" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+          <div class="mfield"><label>Other Debt</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-other" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+          <div class="mfield"><label>Other Assets (cash, etc.)</label><div class="inp-wrap"><span class="inp-prefix">$</span><input type="number" class="manual-input" id="nw-cash" placeholder="0" min="0" oninput="updateNW()"/></div></div>
+        </div>
+        <div style="margin-top:18px"><button class="btn-save" onclick="saveNW()">Save Net Worth Snapshot</button></div>
+      </div>
+      <div class="panel" id="nw-projection-panel" style="display:none">
+        <div class="panel-header"><div class="panel-icon">🏦</div><div>
+          <div class="panel-title">Debt &amp; Asset Breakdown</div>
+          <div class="panel-sub">A clear-eyed look at where you stand — invested capital vs. outstanding liabilities.</div>
+        </div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+          <div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:8px">Debt-to-Asset Ratio</div>
+               <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);font-weight:600" id="nw-ratio">—</div></div>
+          <div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:8px">True Net Worth</div>
+               <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:600" id="nw-true">—</div></div>
+          <div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:8px">Invested vs Owed</div>
+               <div style="font-size:.9rem;color:var(--text-mid);line-height:1.6" id="nw-vs">—</div></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
+<canvas id="confetti-canvas"></canvas>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -599,6 +740,8 @@ function bootSession(email, rec, isNew){
   syncManualInputs();
   updateUI();
   showPage('dashboard');
+  // Restore NW inputs if on that page
+  loadNWInputs();
   setTimeout(renderAllCharts, 120);
 
   const h = getHistory();
@@ -621,6 +764,7 @@ function handleLogout(){
   destroyAllCharts();
   ['login-email','login-password','reg-email','reg-password','reg-confirm']
     .forEach(id => { document.getElementById(id).value = ''; });
+  NW_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   ['login-error','reg-error']
     .forEach(id => { document.getElementById(id).textContent = ''; });
   document.getElementById('copy-link-wrap').style.display = 'none';
@@ -650,12 +794,13 @@ function showPage(name){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  ['dashboard','analytics','manage','goal'].forEach((n,i) => {
+  ['dashboard','analytics','manage','goal','networth'].forEach((n,i) => {
     if(n===name) document.querySelectorAll('.nav-tab')[i].classList.add('active');
   });
   if(name==='analytics') renderAllCharts();
   if(name==='goal')      renderScenarioChart();
   if(name==='manage')    renderHistoryTable();
+  if(name==='networth')  { loadNWInputs(); updateNW(); }
 }
 
 // ══════════════════════════════════════════
@@ -703,6 +848,7 @@ function updateUI(){
   }
 
   updateAnalyticsKPIs(total, h);
+  checkMilestones(total);
   persistAll();
 }
 
@@ -1083,6 +1229,196 @@ zone.addEventListener('drop',e=>{
   // No valid session → show auth
   document.getElementById('auth-screen').style.display = 'flex';
 })();
+// ══════════════════════════════════════════
+//  NET WORTH
+// ══════════════════════════════════════════
+const NW_FIELDS = ['nw-student','nw-car','nw-cc','nw-mortgage','nw-other','nw-cash'];
+
+function getNWDebts(){
+  return ['nw-student','nw-car','nw-cc','nw-mortgage','nw-other']
+    .reduce((s,id) => s + (parseFloat(document.getElementById(id).value)||0), 0);
+}
+function getNWCash(){
+  return parseFloat(document.getElementById('nw-cash').value)||0;
+}
+
+function loadNWInputs(){
+  if(!currentUser) return;
+  const db = loadDB();
+  const nw = db[currentUser] && db[currentUser].nw ? db[currentUser].nw : {};
+  NW_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = nw[id] || '';
+  });
+  updateNW();
+}
+
+function saveNW(){
+  if(!currentUser) return;
+  const db = loadDB();
+  if(!db[currentUser]) return;
+  const nw = {};
+  NW_FIELDS.forEach(id => { nw[id] = parseFloat(document.getElementById(id).value)||0; });
+  db[currentUser].nw = nw;
+  saveDB(db);
+  updateNW();
+  showToast('Net worth snapshot saved ✓');
+}
+
+function updateNW(){
+  const assets  = (state.k401 + state.roth + state.taxable) + getNWCash();
+  const debt    = getNWDebts();
+  const net     = assets - debt;
+  const total   = assets + debt || 1;
+
+  document.getElementById('nw-assets').textContent  = fmt(assets);
+  document.getElementById('nw-debt').textContent    = fmt(debt);
+  const netEl = document.getElementById('nw-net');
+  netEl.textContent = (net >= 0 ? '+' : '') + fmt(net);
+  netEl.className   = 'nw-stat-val ' + (net >= 0 ? 'pos' : 'neg');
+
+  const assetPct = Math.min(100, assets/(total)*100);
+  const debtPct  = Math.min(100, debt/(total)*100);
+  document.getElementById('nw-bar-assets').style.width = assetPct.toFixed(1)+'%';
+  document.getElementById('nw-bar-debt').style.width   = debtPct.toFixed(1)+'%';
+  document.getElementById('nw-track-lbl-assets').textContent = 'Assets: '+fmt(assets);
+  document.getElementById('nw-track-lbl-debt').textContent   = 'Debt: '+fmt(debt);
+
+  const projPanel = document.getElementById('nw-projection-panel');
+  if(debt > 0 || assets > 0){
+    projPanel.style.display = 'block';
+    const ratio = assets > 0 ? (debt/assets*100).toFixed(1)+'%' : '∞';
+    document.getElementById('nw-ratio').textContent = ratio;
+    const trueEl = document.getElementById('nw-true');
+    trueEl.textContent = (net >= 0 ? '+' : '') + fmt(net);
+    trueEl.style.color = net >= 0 ? 'var(--green-val)' : 'var(--red-val)';
+    document.getElementById('nw-vs').innerHTML =
+      `<span style="color:var(--navy);font-weight:600">${fmt(assets)}</span> invested<br>` +
+      `<span style="color:var(--red-val);font-weight:600">${fmt(debt)}</span> owed`;
+  } else {
+    projPanel.style.display = 'none';
+  }
+}
+
+// ══════════════════════════════════════════
+//  MILESTONE CELEBRATIONS
+// ══════════════════════════════════════════
+const MILESTONES = [
+  { pct:10,  icon:'🌱', title:'10% There!',      sub:'You've planted the seed. The first $10k is the hardest step.' },
+  { pct:25,  icon:'🔥', title:'Quarter Way!',     sub:'$25,000 invested. Compound interest is starting to work for you.' },
+  { pct:50,  icon:'⚡', title:'Halfway to $100k!',sub:'$50,000. You're at the tipping point — growth accelerates from here.' },
+  { pct:75,  icon:'🚀', title:'75% Complete!',    sub:'Three quarters done. The finish line is in sight.' },
+  { pct:100, icon:'🏆', title:'$100,000 Reached!',sub:'You've hit the milestone. The first $100k is the hardest — and you did it.' },
+];
+
+function checkMilestones(total){
+  if(!currentUser) return;
+  const db  = loadDB();
+  const rec = db[currentUser];
+  if(!rec) return;
+  const seen = rec.milestonesSeen || [];
+  const pct  = (total / TARGET) * 100;
+
+  for(const m of MILESTONES){
+    if(pct >= m.pct && !seen.includes(m.pct)){
+      seen.push(m.pct);
+      rec.milestonesSeen = seen;
+      db[currentUser] = rec;
+      saveDB(db);
+      showMilestone(m);
+      if(m.pct === 100 || m.pct === 50 || m.pct === 25) fireConfetti();
+      break; // one at a time
+    }
+  }
+}
+
+function showMilestone(m){
+  document.getElementById('milestone-icon').textContent  = m.icon;
+  document.getElementById('milestone-title').textContent = m.title;
+  document.getElementById('milestone-sub').textContent   = m.sub;
+  const ribbon = document.getElementById('milestone-ribbon');
+  ribbon.classList.add('show');
+  // Auto-hide after 12s
+  clearTimeout(ribbon._timer);
+  ribbon._timer = setTimeout(closeMilestone, 12000);
+}
+
+function closeMilestone(){
+  document.getElementById('milestone-ribbon').classList.remove('show');
+}
+
+// Confetti burst
+function fireConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display = 'block';
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#d4a017','#b8860b','#f5f0e8','#1a2540','#7ab87a','#f0c040'];
+  const particles = Array.from({length:120}, () => ({
+    x: Math.random() * canvas.width,
+    y: -20,
+    r: 4 + Math.random()*5,
+    d: 2 + Math.random()*3,
+    color: COLORS[Math.floor(Math.random()*COLORS.length)],
+    tilt: Math.random()*10 - 5,
+    tiltSpeed: 0.1 + Math.random()*0.2,
+    angle: 0,
+  }));
+  let frame = 0;
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.angle += p.tiltSpeed;
+      p.y += p.d;
+      p.x += Math.sin(p.angle) * 1.5;
+      p.tilt = Math.sin(p.angle) * 12;
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
+      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+      ctx.stroke();
+    });
+    frame++;
+    if(frame < 180) requestAnimationFrame(draw);
+    else { ctx.clearRect(0,0,canvas.width,canvas.height); canvas.style.display='none'; }
+  }
+  requestAnimationFrame(draw);
+}
+
+// ══════════════════════════════════════════
+//  PAY YOURSELF FIRST
+// ══════════════════════════════════════════
+function calcPYF(){
+  const income = parseFloat(document.getElementById('pyf-income').value) || 0;
+  const n      = parseFloat(document.getElementById('pyf-years').value)  || 0;
+  const unit   = document.getElementById('pyf-unit').value;
+  const err    = document.getElementById('pyf-result');
+
+  if(!income || income <= 0){ showToast('Please enter your monthly take-home income.'); return; }
+  if(!n || n <= 0)           { showToast('Please enter a target timeline.'); return; }
+
+  let months = unit === 'months' ? n : n * 12;
+  months = Math.max(1, Math.round(months));
+
+  const current = state.k401 + state.roth + state.taxable;
+  const r       = 0.10 / 12;
+  const fvNow   = current * Math.pow(1 + r, months);
+  const needed  = Math.max(0, TARGET - fvNow);
+  const pmt     = needed <= 0 ? 0 : needed / ((Math.pow(1 + r, months) - 1) / r);
+  const pmt_c   = Math.ceil(pmt);
+  const rate    = income > 0 ? (pmt_c / income * 100) : 0;
+  const budget  = Math.max(0, income - pmt_c);
+
+  document.getElementById('pyf-rate').textContent    = rate.toFixed(1) + '%';
+  document.getElementById('pyf-monthly').textContent = fmt(pmt_c);
+  document.getElementById('pyf-budget').textContent  = fmt(budget);
+  document.getElementById('pyf-note').textContent    =
+    `${fmt(budget)} left for rent, food & lifestyle`;
+  document.getElementById('pyf-result').classList.add('show');
+}
+
 </script>
 </body>
 </html>
