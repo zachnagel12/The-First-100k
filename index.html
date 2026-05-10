@@ -384,8 +384,18 @@ body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--text);min
         </div>
       </div>
       <div class="panel">
-        <div class="panel-header"><div class="panel-icon">📐</div><div><div class="panel-title">Scenario Comparison</div><div class="panel-sub">See how different monthly contribution levels change your path to $100k — with 10% annual returns applied throughout.</div></div></div>
+        <div class="panel-header"><div class="panel-icon">📐</div><div><div class="panel-title">Scenario Comparison</div><div class="panel-sub">Type your monthly contribution to highlight your personal path in gold. The dashed lines are reference guidelines for context.</div></div></div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;background:#fff;border:2px solid var(--gold);border-radius:var(--radius);overflow:hidden;box-shadow:0 0 0 3px rgba(184,134,11,.1)">
+            <span style="padding:11px 12px 11px 14px;color:var(--gold);font-size:1.1rem;font-weight:700;font-family:'Playfair Display',serif;border-right:1px solid var(--border);background:#fffdf7">$</span>
+            <input type="number" id="scenario-pmt" min="0" step="50" placeholder="e.g. 500" oninput="renderScenarioChart()"
+              style="border:none;outline:none;padding:11px 16px;font-family:'Jost',sans-serif;font-size:1rem;font-weight:600;color:var(--navy);width:150px;background:#fffdf7"/>
+            <span style="padding:11px 16px 11px 0;font-size:.8rem;color:var(--text-muted);background:#fffdf7;white-space:nowrap">/month</span>
+          </div>
+          <div id="scenario-callout" style="font-size:.85rem;color:var(--text-mid);font-style:italic;line-height:1.5"></div>
+        </div>
         <div class="chart-wrap tall"><canvas id="chart-scenarios"></canvas></div>
+        <div id="scenario-legend" style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)"></div>
       </div>
     </div>
 
@@ -793,6 +803,9 @@ function calcGoal(){
   document.getElementById('res-date').textContent    = d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
   document.getElementById('res-note').textContent    = `${months} month${months!==1?'s':''} from today`;
   document.getElementById('goal-result').classList.add('show');
+  // Pre-fill scenario input with the calculated monthly contribution
+  const scenInp = document.getElementById('scenario-pmt');
+  if(scenInp && pmt > 0) scenInp.value = Math.ceil(pmt);
   renderScenarioChart();
 }
 
@@ -903,18 +916,139 @@ function renderBreakdownChart(){
 function renderScenarioChart(){
   const canvas=document.getElementById('chart-scenarios'); if(!canvas) return;
   if(charts.scenarios){charts.scenarios.destroy();delete charts.scenarios;}
-  const total=state.k401+state.roth+state.taxable; const r=0.10/12;
-  const scenarios=[200,400,600,1000]; const colors=[C_BLUE,'#7ab87a',C_GOLD,C_NAVY]; const maxMo=180;
-  const labels=['Now',...Array.from({length:maxMo},(_,i)=>'Mo '+(i+1))];
-  const datasets=scenarios.map((pmt,i)=>{
-    const data=[total]; let cur=total;
-    for(let m=1;m<=maxMo;m++){ if(cur>=TARGET){data.push(TARGET);}else{cur=cur*(1+r)+pmt;data.push(Math.min(TARGET,Math.round(cur)));} }
-    return{label:'$'+pmt+'/mo',data,borderColor:colors[i],backgroundColor:'transparent',borderWidth:2,tension:.3,pointRadius:0};
+
+  const total  = state.k401+state.roth+state.taxable;
+  const r      = 0.10/12;
+  const maxMo  = 240;
+  const guides = [100,250,500,1000,2000]; // always-visible reference lines
+
+  // User's typed amount
+  const inputEl = document.getElementById('scenario-pmt');
+  const userPmt = inputEl ? (parseFloat(inputEl.value)||null) : null;
+
+  // Build month labels up to where everything converges or maxMo
+  const labels = ['Now', ...Array.from({length:maxMo},(_,i)=>'Mo '+(i+1))];
+
+  function projectLine(pmt){
+    const pts=[total]; let cur=total;
+    for(let m=1;m<=maxMo;m++){
+      if(cur>=TARGET){ pts.push(TARGET); }
+      else{ cur=cur*(1+r)+pmt; pts.push(Math.min(TARGET,Math.round(cur))); }
+    }
+    return pts;
+  }
+
+  function monthsToGoal(pmt){
+    let cur=total,m=0;
+    while(cur<TARGET&&m<maxMo){ cur=cur*(1+r)+pmt; m++; }
+    return cur>=TARGET ? m : null;
+  }
+
+  const datasets = [];
+
+  // Guide lines — dim, dashed
+  guides.forEach(pmt => {
+    datasets.push({
+      label: '$'+pmt.toLocaleString()+'/mo',
+      data: projectLine(pmt),
+      borderColor: 'rgba(26,37,64,0.18)',
+      backgroundColor: 'transparent',
+      borderWidth: 1.5,
+      borderDash: [4,4],
+      tension: 0.3,
+      pointRadius: 0,
+      _isGuide: true,
+      _pmt: pmt,
+    });
   });
-  datasets.push({label:'$100k Goal',data:labels.map(()=>TARGET),borderColor:'rgba(26,37,64,.25)',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false,backgroundColor:'transparent'});
-  const cfg=chartDefaults();
-  charts.scenarios=new Chart(canvas,{type:'line',data:{labels,datasets},
-    options:{...cfg,plugins:{...cfg.plugins,legend:{display:true,labels:{color:'#4a4035',font:{family:C_FONT,size:12},boxWidth:14,padding:16}}}}});
+
+  // User line — bold gold, solid, with a glow effect via multiple layers
+  if(userPmt && userPmt > 0){
+    // Glow layer (thicker, very transparent)
+    datasets.push({
+      label: '__glow__',
+      data: projectLine(userPmt),
+      borderColor: 'rgba(212,160,23,0.18)',
+      backgroundColor: 'transparent',
+      borderWidth: 14,
+      tension: 0.3,
+      pointRadius: 0,
+      _isUser: true,
+    });
+    // Main user line
+    datasets.push({
+      label: '$'+userPmt.toLocaleString()+'/mo — Your Goal',
+      data: projectLine(userPmt),
+      borderColor: C_GOLD,
+      backgroundColor: 'rgba(212,160,23,0.07)',
+      fill: false,
+      borderWidth: 3.5,
+      tension: 0.3,
+      pointRadius: 0,
+      _isUser: true,
+    });
+
+    // Update callout
+    const m = monthsToGoal(userPmt);
+    const callEl = document.getElementById('scenario-callout');
+    if(callEl){
+      if(m){
+        const target = new Date(); target.setMonth(target.getMonth()+m);
+        const dateStr = target.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+        callEl.innerHTML =
+          `At <strong style="color:var(--navy)">$${userPmt.toLocaleString()}/mo</strong>, ` +
+          `you hit $100k in <strong style="color:var(--gold)">${m} month${m!==1?'s':''}</strong> &mdash; by <strong style="color:var(--navy)">${dateStr}</strong>.`;
+      } else {
+        callEl.textContent = 'At this rate it would take over 20 years — try a higher contribution.';
+      }
+    }
+  } else {
+    const callEl = document.getElementById('scenario-callout');
+    if(callEl) callEl.textContent = 'Enter a monthly amount above to see your personal path.';
+  }
+
+  // Goal line
+  datasets.push({
+    label: '$100k Goal',
+    data: labels.map(()=>TARGET),
+    borderColor: 'rgba(26,37,64,0.3)',
+    borderDash: [6,4],
+    borderWidth: 1.5,
+    pointRadius: 0,
+    fill: false,
+    backgroundColor: 'transparent',
+  });
+
+  const cfg = chartDefaults();
+  charts.scenarios = new Chart(canvas,{
+    type:'line',
+    data:{labels, datasets},
+    options:{
+      ...cfg,
+      plugins:{
+        ...cfg.plugins,
+        legend:{ display:false },   // we build our own legend below
+      }
+    }
+  });
+
+  // Custom legend
+  const legendEl = document.getElementById('scenario-legend');
+  if(legendEl){
+    const guideItems = guides.map(p =>
+      `<span style="display:flex;align-items:center;gap:6px;font-size:.74rem;color:#aaa">
+        <span style="display:inline-block;width:22px;height:2px;background:rgba(26,37,64,.3);border-top:2px dashed rgba(26,37,64,.3)"></span>
+        $${p.toLocaleString()}/mo
+      </span>`
+    ).join('');
+    const userItem = userPmt && userPmt > 0
+      ? `<span style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--navy);font-weight:600">
+           <span style="display:inline-block;width:28px;height:3px;background:var(--gold);border-radius:2px"></span>
+           $${userPmt.toLocaleString()}/mo — Your Contribution
+         </span>`
+      : '';
+    legendEl.innerHTML = (userItem ? userItem + guideItems : guideItems);
+  }
 }
 
 // ══════════════════════════════════════════
